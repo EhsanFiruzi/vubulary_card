@@ -2,7 +2,6 @@
 
 import React, {
   JSX,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -18,7 +17,6 @@ interface Palette {
 }
 
 interface CardData {
-  id?: number;
   word: string;
   meanings: string[];
   example: string;
@@ -64,37 +62,25 @@ const palettes: Palette[] = [
   },
 ];
 
-const starter: CardData = {
-  word: "resilient",
-  meanings: [
-    "توانایی بازیابی سریع بعد از سختی",
-    "قوی ماندن بعد از یک دوره دشوار",
-  ],
-  example: "She stayed resilient after a difficult week.",
-  notes: "یادآوری: بعد از هر سختی دوباره برمی‌گردد و تسلیم نمی‌شود.",
-  color: palettes[0].name,
-};
-
 type IconName =
-  | "sparkles"
+  | "share"
+  | "download"
   | "plus"
   | "trash"
-  | "download"
-  | "share"
-  | "check"
   | "book"
   | "type"
-  | "wand"
-  | "history"
-  | "chevron"
-  | "x";
+  | "check"
+  | "chevron";
 
 interface IconProps {
   name: IconName;
   size?: number;
 }
 
-function Icon({ name, size = 18 }: IconProps) {
+function Icon({
+  name,
+  size = 18,
+}: IconProps) {
   const common = {
     width: size,
     height: size,
@@ -106,19 +92,33 @@ function Icon({ name, size = 18 }: IconProps) {
     strokeLinejoin: "round" as const,
   };
 
-  const icons: Record<IconName, JSX.Element> = {
-    sparkles: (
+  const icons: Record<
+    IconName,
+    JSX.Element
+  > = {
+    share: (
       <>
-        <path d="M12 3l1.2 3.8L17 8l-3.8 1.2L12 13l-1.2-3.8L7 8l3.8-1.2L12 3Z" />
-        <path d="M19 14l.7 2.3L22 17l-2.3.7L19 20l-.7-2.3L16 17l2.3-.7L19 14Z" />
-        <path d="M5 14l.6 1.8L7.5 16l-1.9.6L5 18.5l-.6-1.9L2.5 16l1.9-.2L5 14Z" />
+        <path d="M4 12v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6" />
+        <path d="m16 6-4-4-4 4" />
+        <path d="M12 2v12" />
       </>
     ),
+
+    download: (
+      <>
+        <path d="M12 3v12" />
+        <path d="m7 10 5 5 5-5" />
+        <path d="M5 20h14" />
+      </>
+    ),
+
     plus: (
       <>
-        <path d="M12 5v14M5 12h14" />
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
       </>
     ),
+
     trash: (
       <>
         <path d="M4 7h16" />
@@ -127,121 +127,139 @@ function Icon({ name, size = 18 }: IconProps) {
         <path d="M10 11v5M14 11v5" />
       </>
     ),
-    download: (
-      <>
-        <path d="M12 3v12" />
-        <path d="m7 10 5 5 5-5" />
-        <path d="M5 20h14" />
-      </>
-    ),
-    share: (
-      <>
-        <path d="M4 12v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6" />
-        <path d="m16 6-4-4-4 4" />
-        <path d="M12 2v12" />
-      </>
-    ),
-    check: <path d="m5 12 4 4L19 6" />,
+
     book: (
       <>
         <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z" />
         <path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20" />
       </>
     ),
+
     type: (
       <>
-        <path d="M4 6V4h16v2M12 4v16M8 20h8" />
+        <path d="M4 6V4h16v2" />
+        <path d="M12 4v16" />
+        <path d="M8 20h8" />
       </>
     ),
-    wand: (
-      <>
-        <path d="m15 4 5 5" />
-        <path d="m13 6 5 5" />
-        <path d="M4 20 14 10" />
-        <path d="m4 14 6 6" />
-      </>
+
+    check: (
+      <path d="m5 12 4 4L19 6" />
     ),
-    history: (
-      <>
-        <path d="M3 12a9 9 0 1 0 3-6.7" />
-        <path d="M3 4v5h5" />
-        <path d="M12 7v5l3 2" />
-      </>
-    ),
-    chevron: <path d="m6 9 6 6 6-6" />,
-    x: (
-      <>
-        <path d="m6 6 12 12" />
-        <path d="m18 6-12 12" />
-      </>
+
+    chevron: (
+      <path d="m6 9 6 6 6-6" />
     ),
   };
 
-  return <svg {...common}>{icons[name]}</svg>;
+  return (
+    <svg {...common}>
+      {icons[name]}
+    </svg>
+  );
 }
 
-interface WordMeaningsProps {
+interface MeaningListProps {
   meanings: string[];
-  setMeanings: React.Dispatch<React.SetStateAction<string[]>>;
+  setMeanings: React.Dispatch<
+    React.SetStateAction<string[]>
+  >;
 }
 
-function WordMeanings({
+function MeaningList({
   meanings,
   setMeanings,
-}: WordMeaningsProps) {
-  const update = (index: number, value: string) => {
-    const next = [...meanings];
-    next[index] = value;
-    setMeanings(next);
+}: MeaningListProps) {
+  const updateMeaning = (
+    index: number,
+    value: string
+  ) => {
+    setMeanings((current) => {
+      const next = [...current];
+      next[index] = value;
+      return next;
+    });
   };
 
-  const add = () => {
-    setMeanings([...meanings, ""]);
+  const addMeaning = () => {
+    setMeanings((current) => [
+      ...current,
+      "",
+    ]);
   };
 
-  const remove = (index: number) => {
-    if (meanings.length <= 1) return;
-    setMeanings(meanings.filter((_, i) => i !== index));
+  const removeMeaning = (
+    index: number
+  ) => {
+    setMeanings((current) => {
+      if (current.length === 1) {
+        return [""];
+      }
+
+      return current.filter(
+        (_, i) => i !== index
+      );
+    });
   };
 
   return (
     <div className="meaning-list">
-      {meanings.map((meaning, index) => (
-        <div className="meaning-row" key={index}>
-          <span className="meaning-index">{index + 1}</span>
+      {meanings.map(
+        (meaning, index) => (
+          <div
+            className="meaning-row"
+            key={index}
+          >
+            <span className="meaning-number">
+              {index + 1}
+            </span>
 
-          <input
-            value={meaning}
-            onChange={(e) => update(index, e.target.value)}
-            placeholder={
-              index === 0
-                ? "مثلاً: توانمند در بازگشت بعد از سختی"
-                : "یک معنی دیگر..."
-            }
-            aria-label={`معنی ${index + 1}`}
-          />
+            <input
+              value={meaning}
+              onChange={(event) =>
+                updateMeaning(
+                  index,
+                  event.target.value
+                )
+              }
+              placeholder={
+                index === 0
+                  ? "مثلاً: مقاوم و توانمند در بازگشت"
+                  : "یک معنی دیگر..."
+              }
+              aria-label={`معنی ${index + 1}`}
+              dir="rtl"
+            />
 
-          {meanings.length > 1 && (
-            <button
-              type="button"
-              className="icon-button"
-              onClick={() => remove(index)}
-              aria-label={`حذف معنی ${index + 1}`}
-              title="حذف معنی"
-            >
-              <Icon name="trash" size={15} />
-            </button>
-          )}
-        </div>
-      ))}
+            {meanings.length > 1 && (
+              <button
+                type="button"
+                className="remove-button"
+                onClick={() =>
+                  removeMeaning(index)
+                }
+                aria-label={`حذف معنی ${index + 1}`}
+              >
+                <Icon
+                  name="trash"
+                  size={15}
+                />
+              </button>
+            )}
+          </div>
+        )
+      )}
 
       <button
         type="button"
         className="add-meaning"
-        onClick={add}
+        onClick={addMeaning}
       >
-        <Icon name="plus" size={15} />
-        افزودن معنی دیگر
+        <Icon
+          name="plus"
+          size={15}
+        />
+        افزودن معنی
       </button>
     </div>
   );
@@ -257,162 +275,148 @@ function CardPreview({
   cardRef,
 }: CardPreviewProps) {
   const palette =
-    palettes.find((p) => p.name === data.color) || palettes[0];
+    palettes.find(
+      (item) => item.name === data.color
+    ) || palettes[0];
+
+  const meanings =
+    data.meanings.filter(
+      (meaning) => meaning.trim()
+    );
 
   const cardStyle = {
     "--accent": palette.value,
     "--glow": palette.glow,
-    "--card-surface": palette.surface,
+    "--surface": palette.surface,
   } as React.CSSProperties;
-
-  const validMeanings = data.meanings.filter(Boolean);
 
   return (
     <div
-      className="card-export"
       ref={cardRef}
+      className="card-export"
       style={cardStyle}
     >
-      <div className="card-noise" />
+      <div className="card-glow" />
 
-      <div className="card-topline">
+      <div className="card-top">
         <span>VOCABULARY CARD</span>
+
         <span>
           #
           {data.word.trim()
-            ? data.word.trim().slice(0, 1).toUpperCase()
+            ? data.word
+                .trim()
+                .slice(0, 1)
+                .toUpperCase()
             : "V"}
         </span>
       </div>
 
-      <div className="card-word-wrap">
+      <div className="card-main">
         <div className="card-word">
-          {data.word || "Your word"}
+          {data.word.trim() ||
+            "Your word"}
         </div>
 
         <div className="card-tag">
-          ENGLISH WORD • PERSIAN MEANING
+          ENGLISH WORD
         </div>
-      </div>
 
-      <div className="card-divider" />
+        <div className="card-divider" />
 
-      <div className="card-section">
-        <span className="card-label">معنی فارسی</span>
+        <div className="card-section">
+          <span className="card-label">
+            معنی فارسی
+          </span>
 
-        <div className="card-meanings">
-          {validMeanings.length > 0 ? (
-            validMeanings.map((meaning, i) => (
-              <div
-                key={i}
-                className="card-meaning"
-              >
-                <span>{i + 1}</span>
-                <div>{meaning}</div>
-              </div>
-            ))
+          {meanings.length > 0 ? (
+            <div className="card-meanings">
+              {meanings.map(
+                (meaning, index) => (
+                  <div
+                    className="card-meaning"
+                    key={index}
+                  >
+                    <span>
+                      {index + 1}
+                    </span>
+
+                    <div dir="rtl">
+                      {meaning}
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
           ) : (
-            <div className="empty-copy">
-              معنی فارسی کلمه را اضافه کنید.
+            <div className="card-empty">
+              معنی کلمه اینجا نمایش داده می‌شود.
             </div>
           )}
         </div>
+
+        {data.example.trim() && (
+          <div className="card-section">
+            <span className="card-label">
+              EXAMPLE
+            </span>
+
+            <p className="card-example">
+              “{data.example}”
+            </p>
+          </div>
+        )}
+
+        {data.notes.trim() && (
+          <div className="card-note">
+            <span>↳</span>
+            <div dir="rtl">
+              {data.notes}
+            </div>
+          </div>
+        )}
       </div>
 
-      {data.example.trim() && (
-        <div className="card-section card-example">
-          <span className="card-label">
-            EXAMPLE SENTENCE
-          </span>
-          <p>“{data.example}”</p>
-        </div>
-      )}
-
-      {data.notes.trim() && (
-        <div className="card-note">
-          <span>↳</span>
-          {data.notes}
-        </div>
-      )}
-
-      <div className="card-footer">
+      <div className="card-bottom">
         <span>
-          یاد بگیر. استفاده کن. به خاطر بسپار.
+          یاد بگیر. استفاده کن.
         </span>
-        <span className="accent-dot" />
+
+        <span className="card-dot" />
       </div>
     </div>
   );
 }
 
-function Header() {
-  return (
-    <header className="site-header">
-      <div className="brand">
-        <div className="brand-mark">
-          <Icon name="book" size={18} />
-        </div>
-
-        <span>
-          Vocabulary <b>Card Maker</b>
-        </span>
-      </div>
-
-      <div className="header-pill">
-        <span className="status-dot" />
-        Built for better recall
-      </div>
-    </header>
-  );
-}
-
 export default function Home() {
-  const [word, setWord] = useState<string>(
-    starter.word
-  );
+  const [word, setWord] =
+    useState("");
 
-  const [meanings, setMeanings] = useState<string[]>(
-    starter.meanings
-  );
+  const [meanings, setMeanings] =
+    useState<string[]>([""]);
 
-  const [example, setExample] = useState<string>(
-    starter.example
-  );
+  const [example, setExample] =
+    useState("");
 
-  const [notes, setNotes] = useState<string>(
-    starter.notes
-  );
+  const [notes, setNotes] =
+    useState("");
 
-  const [color, setColor] = useState<string>(
-    starter.color
-  );
+  const [color, setColor] =
+    useState("violet");
 
-  const [saved, setSaved] = useState<CardData[]>([]);
-  const [toast, setToast] = useState("");
-  const [toastAction, setToastAction] = useState<
-    (() => void) | null
-  >(null);
+  const [detailsOpen, setDetailsOpen] =
+    useState(false);
 
   const [isSharing, setIsSharing] =
     useState(false);
 
-  const [showAdvanced, setShowAdvanced] =
-    useState(false);
-
-  const [showCollection, setShowCollection] =
-    useState(false);
-
-  const [wordError, setWordError] =
+  const [toast, setToast] =
     useState("");
 
-  const [meaningError, setMeaningError] =
-    useState("");
+  const cardRef =
+    useRef<HTMLDivElement>(null);
 
-  const cardRef = useRef<HTMLDivElement>(null);
-  const wordInputRef =
-    useRef<HTMLInputElement>(null);
-
-  const data: CardData = useMemo(
+  const data = useMemo<CardData>(
     () => ({
       word,
       meanings,
@@ -420,121 +424,64 @@ export default function Home() {
       notes,
       color,
     }),
-    [word, meanings, example, notes, color]
+    [
+      word,
+      meanings,
+      example,
+      notes,
+      color,
+    ]
   );
 
-  const canCreate =
-    word.trim().length > 0 &&
-    meanings.some((meaning) => meaning.trim());
+  const canShare =
+    Boolean(word.trim()) &&
+    meanings.some(
+      (meaning) => meaning.trim()
+    );
 
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(
-        localStorage.getItem("vcm-cards") || "[]"
-      );
+  const hasDetails =
+    Boolean(
+      example.trim() ||
+        notes.trim() ||
+        color !== "violet"
+    );
 
-      if (Array.isArray(stored)) {
-        setSaved(stored);
-      }
-    } catch {
-      // ignore invalid localStorage
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!toast) return;
-
-    const id = window.setTimeout(() => {
-      setToast("");
-      setToastAction(null);
-    }, 3200);
-
-    return () => window.clearTimeout(id);
-  }, [toast]);
-
-  const notify = (
-    message: string,
-    action?: () => void
+  const showToast = (
+    message: string
   ) => {
     setToast(message);
-    setToastAction(() => action || null);
+
+    window.setTimeout(() => {
+      setToast("");
+    }, 2500);
   };
 
   const validate = () => {
-    let valid = true;
-
     if (!word.trim()) {
-      setWordError("اول یک کلمه انگلیسی وارد کن.");
-      valid = false;
-    } else {
-      setWordError("");
+      showToast(
+        "اول کلمه انگلیسی را وارد کن."
+      );
+      return false;
     }
 
-    if (!meanings.some((meaning) => meaning.trim())) {
-      setMeaningError("حداقل یک معنی وارد کن.");
-      valid = false;
-    } else {
-      setMeaningError("");
+    if (
+      !meanings.some(
+        (meaning) => meaning.trim()
+      )
+    ) {
+      showToast(
+        "حداقل یک معنی وارد کن."
+      );
+      return false;
     }
 
-    return valid;
-  };
-
-  const saveCard = () => {
-    if (!validate()) return;
-
-    const newCard: CardData = {
-      ...data,
-      id: Date.now(),
-    };
-
-    const next = [newCard, ...saved].slice(0, 18);
-
-    setSaved(next);
-    localStorage.setItem(
-      "vcm-cards",
-      JSON.stringify(next)
-    );
-
-    notify("کارت در مجموعه‌ات ذخیره شد.");
-  };
-
-  const loadCard = (card: CardData) => {
-    setWord(card.word);
-    setMeanings(
-      card.meanings?.length
-        ? card.meanings
-        : [""]
-    );
-    setExample(card.example || "");
-    setNotes(card.notes || "");
-    setColor(card.color || palettes[0].name);
-
-    setWordError("");
-    setMeaningError("");
-    setShowAdvanced(
-      Boolean(card.example || card.notes)
-    );
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
-    notify("کارت بارگذاری شد.");
-  };
-
-  const createCard = () => {
-    if (!validate()) {
-      wordInputRef.current?.focus();
-      return;
-    }
-
-    notify("کارت آماده است ✨");
+    return true;
   };
 
   const exportCard = async () => {
-    if (!cardRef.current) return;
+    if (!cardRef.current) {
+      return;
+    }
 
     if (!validate()) {
       return;
@@ -557,22 +504,35 @@ export default function Home() {
         word
           .trim()
           .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-") ||
+          .replace(
+            /[^a-z0-9]+/g,
+            "-"
+          ) ||
         "vocabulary-card";
 
-      link.download = `${safeWord}-vocabulary-card.png`;
+      link.download =
+        `${safeWord}-vocabulary-card.png`;
+
       link.href = dataUrl;
       link.click();
 
-      notify("تصویر کارت دانلود شد.");
+      showToast(
+        "تصویر کارت دانلود شد."
+      );
     } catch (error) {
       console.error(error);
-      notify("ساخت تصویر با مشکل مواجه شد.");
+
+      showToast(
+        "ساخت تصویر انجام نشد."
+      );
     }
   };
 
   const shareCard = async () => {
-    if (!cardRef.current || isSharing) {
+    if (
+      !cardRef.current ||
+      isSharing
+    ) {
       return;
     }
 
@@ -592,14 +552,20 @@ export default function Home() {
         }
       );
 
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
+      const response =
+        await fetch(dataUrl);
+
+      const blob =
+        await response.blob();
 
       const safeWord =
         word
           .trim()
           .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-") ||
+          .replace(
+            /[^a-z0-9]+/g,
+            "-"
+          ) ||
         "vocabulary-card";
 
       const file = new File(
@@ -611,10 +577,11 @@ export default function Home() {
       );
 
       if (
-        typeof navigator.share !== "function"
+        typeof navigator.share !==
+        "function"
       ) {
-        notify(
-          "اشتراک‌گذاری مستقیم در این مرورگر فعال نیست."
+        showToast(
+          "اشتراک‌گذاری در این مرورگر پشتیبانی نمی‌شود."
         );
         return;
       }
@@ -626,23 +593,27 @@ export default function Home() {
           files: [file],
         })
       ) {
-        notify(
-          "این مرورگر اشتراک‌گذاری مستقیم عکس را پشتیبانی نمی‌کند."
+        showToast(
+          "اشتراک‌گذاری عکس در این مرورگر پشتیبانی نمی‌شود."
         );
         return;
       }
 
       await navigator.share({
-        title: `${word || "Vocabulary"} — کارت لغت`,
-        text: "یک کارت لغت برای یادگیری انگلیسی ساختم.",
+        title:
+          `${word} — کارت لغت`,
+        text:
+          "یک کارت لغت برای یادگیری انگلیسی ساختم.",
         files: [file],
       });
-
-      notify("کارت آماده اشتراک‌گذاری است.");
     } catch (error: unknown) {
-      const err = error as Error;
+      const err =
+        error as Error;
 
-      if (err?.name === "AbortError") {
+      if (
+        err?.name ===
+        "AbortError"
+      ) {
         return;
       }
 
@@ -651,395 +622,251 @@ export default function Home() {
         error
       );
 
-      notify(
-        "اشتراک‌گذاری انجام نشد. می‌توانی تصویر را دانلود کنی."
+      showToast(
+        "اشتراک‌گذاری انجام نشد."
       );
     } finally {
       setIsSharing(false);
     }
   };
 
-  const clearAll = () => {
-    const previous: CardData = {
-      ...data,
-    };
-
-    setWord("");
-    setMeanings([""]);
-    setExample("");
-    setNotes("");
-    setColor(palettes[0].name);
-
-    setWordError("");
-    setMeaningError("");
-    setShowAdvanced(false);
-
-    notify(
-      "فرم پاک شد.",
-      () => {
-        setWord(previous.word);
-        setMeanings(previous.meanings);
-        setExample(previous.example);
-        setNotes(previous.notes);
-        setColor(previous.color);
-      }
-    );
-
-    requestAnimationFrame(() => {
-      wordInputRef.current?.focus();
-    });
-  };
-
-  const hasContent =
-    Boolean(word.trim()) ||
-    meanings.some((x) => x.trim()) ||
-    Boolean(example.trim()) ||
-    Boolean(notes.trim());
-
   return (
-    <main className="app-shell">
-      <div
-        className="ambient ambient-one"
-        aria-hidden="true"
-      />
-      <div
-        className="ambient ambient-two"
-        aria-hidden="true"
-      />
-
-      <Header />
-
-      <section className="hero">
-        <div>
-          <div className="eyebrow">
-            <Icon name="sparkles" size={14} />
-            یک کلمه را به چیزی تبدیل کن که یادت بماند.
+    <main className="app">
+      <header className="header">
+        <div className="logo">
+          <div className="logo-icon">
+            <Icon
+              name="book"
+              size={17}
+            />
           </div>
 
-          <h1>
-            کلمات انگلیسی را{" "}
-            <span>به خاطر بسپار.</span>
-          </h1>
-
-          <p>
-            کلمه را وارد کن، معنی‌اش را بنویس و در چند
-            ثانیه یک کارت زیبا برای مرور و اشتراک‌گذاری
-            بساز.
-          </p>
+          <span>
+            Vocabulary Card
+          </span>
         </div>
+      </header>
 
-        <div className="hero-tip">
-          <Icon name="wand" size={17} />
-
-          <div>
-            <b>نکته یادگیری</b>
+      <section className="creator">
+        <div className="editor">
+          <div className="editor-title">
+            <h1>
+              کارت لغت بساز
+            </h1>
 
             <span>
-              یک جمله واقعی، کلمه را از یک تعریف خشک به
-              چیزی قابل یادآوری تبدیل می‌کند.
+              سریع و ساده
             </span>
           </div>
-        </div>
-      </section>
 
-      <section className="workspace">
-        <div className="editor-panel panel">
-          <div className="panel-heading">
-            <div>
-              <span className="step">01</span>
-
-              <div>
-                <h2>کارتت را بساز</h2>
-                <p>
-                  فقط اطلاعاتی را اضافه کن که به یادآوری
-                  کمک می‌کنند.
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className="text-button"
-              onClick={clearAll}
-              disabled={!hasContent}
-            >
-              شروع جدید
-            </button>
-          </div>
-
-          <label className="field-label">
-            <span>
+          <div className="field">
+            <label htmlFor="word">
               کلمه انگلیسی
-              <em className="required-mark">
-                ضروری
-              </em>
-            </span>
+            </label>
 
-            <small>
-              کلمه‌ای را وارد کن که می‌خواهی یاد بگیری.
-            </small>
-          </label>
+            <div className="input-wrap">
+              <Icon
+                name="type"
+                size={18}
+              />
 
-          <div
-            className={`word-input-wrap ${
-              wordError ? "has-error" : ""
-            }`}
-          >
-            <Icon name="type" size={19} />
-
-            <input
-              ref={wordInputRef}
-              className="word-input"
-              value={word}
-              onChange={(e) => {
-                setWord(e.target.value);
-
-                if (e.target.value.trim()) {
-                  setWordError("");
+              <input
+                id="word"
+                value={word}
+                onChange={(event) =>
+                  setWord(
+                    event.target.value
+                  )
                 }
-              }}
-              placeholder="مثلاً resilient"
-              autoCapitalize="none"
-              autoComplete="off"
-              spellCheck={false}
-              aria-invalid={Boolean(wordError)}
-              aria-describedby={
-                wordError
-                  ? "word-error"
-                  : undefined
+                placeholder="مثلاً resilient"
+                autoFocus
+                autoCapitalize="none"
+                autoComplete="off"
+                spellCheck={false}
+              />
+            </div>
+          </div>
+
+          <div className="field">
+            <label>
+              معنی فارسی
+            </label>
+
+            <MeaningList
+              meanings={meanings}
+              setMeanings={
+                setMeanings
               }
             />
           </div>
 
-          {wordError && (
-            <div
-              id="word-error"
-              className="field-error"
-            >
-              {wordError}
-            </div>
-          )}
-
-          <label className="field-label gap">
-            <span>
-              معنی فارسی
-              <em className="required-mark">
-                ضروری
-              </em>
-            </span>
-
-            <small>
-              برای یک کلمه می‌توانی چند معنی مرتبط بنویسی.
-            </small>
-          </label>
-
-          <WordMeanings
-            meanings={meanings}
-            setMeanings={(value) => {
-              setMeanings(value);
-
-              const next =
-                typeof value === "function"
-                  ? value(meanings)
-                  : value;
-
-              if (
-                Array.isArray(next) &&
-                next.some((item) =>
-                  item.trim()
-                )
-              ) {
-                setMeaningError("");
-              }
-            }}
-          />
-
-          {meaningError && (
-            <div className="field-error">
-              {meaningError}
-            </div>
-          )}
-
           <button
             type="button"
-            className="advanced-toggle"
+            className={`details-toggle ${
+              detailsOpen
+                ? "open"
+                : ""
+            }`}
             onClick={() =>
-              setShowAdvanced((prev) => !prev)
+              setDetailsOpen(
+                (current) =>
+                  !current
+              )
             }
-            aria-expanded={showAdvanced}
+            aria-expanded={
+              detailsOpen
+            }
           >
-            <span>
-              گزینه‌های بیشتر
-              <small>
-                جمله نمونه، یادداشت و رنگ
-              </small>
+            <span className="details-left">
+              <span className="details-title">
+                جزئیات بیشتر
+              </span>
+
+              <span className="details-subtitle">
+                مثال، توضیحات و رنگ کارت
+                <span
+                  className={`detail-status ${
+                    hasDetails
+                      ? "filled"
+                      : ""
+                  }`}
+                >
+                  {hasDetails
+                    ? "تکمیل شده"
+                    : "اختیاری"}
+                </span>
+              </span>
             </span>
 
-            <span
-              className={
-                showAdvanced
-                  ? "chevron open"
-                  : "chevron"
-              }
-            >
-              <Icon name="chevron" size={16} />
+            <span className="details-chevron">
+              <Icon
+                name="chevron"
+                size={16}
+              />
             </span>
           </button>
 
-          {showAdvanced && (
-            <div className="advanced-fields">
-              <label className="field-label">
-                <span>
-                  جمله نمونه <em>اختیاری</em>
-                </span>
+          {detailsOpen && (
+            <div className="details-content">
+              <div className="detail-field">
+                <label htmlFor="example">
+                  مثال در جمله
+                  <span>
+                    اختیاری
+                  </span>
+                </label>
 
-                <small>
-                  کلمه را در یک جمله واقعی به کار ببر.
-                </small>
-              </label>
+                <textarea
+                  id="example"
+                  value={example}
+                  onChange={(event) =>
+                    setExample(
+                      event.target.value
+                    )
+                  }
+                  placeholder="مثلاً: She stayed resilient after a difficult week."
+                  rows={3}
+                  dir="ltr"
+                  spellCheck
+                />
+              </div>
 
-              <textarea
-                value={example}
-                onChange={(e) =>
-                  setExample(e.target.value)
-                }
-                rows={3}
-                placeholder="مثلاً: She stayed resilient after a difficult week."
-              />
+              <div className="detail-field">
+                <label htmlFor="notes">
+                  توضیحات بیشتر
+                  <span>
+                    اختیاری
+                  </span>
+                </label>
 
-              <label className="field-label">
-                <span>
-                  توضیحات بیشتر <em>اختیاری</em>
-                </span>
+                <textarea
+                  id="notes"
+                  value={notes}
+                  onChange={(event) =>
+                    setNotes(
+                      event.target.value
+                    )
+                  }
+                  placeholder="مثلاً تلفظ، مترادف یا یک نکته برای به خاطر سپردن..."
+                  rows={3}
+                  dir="rtl"
+                />
+              </div>
 
-                <small>
-                  تلفظ، مترادف، نکته حفظی یا هر چیز مفید.
-                </small>
-              </label>
+              <div className="color-field">
+                <div>
+                  <label>
+                    رنگ کارت
+                  </label>
 
-              <textarea
-                value={notes}
-                onChange={(e) =>
-                  setNotes(e.target.value)
-                }
-                rows={2}
-                placeholder="مثلاً: تلفظ /rɪˈzɪliənt/ یا مترادف strong"
-              />
-
-              <div className="color-section">
-                <div className="field-label">
-                  <span>رنگ کارت</span>
-                  <small>
-                    رنگی را انتخاب کن که راحت‌تر یادت بماند.
-                  </small>
+                  <span>
+                    برای شخصی‌سازی کارت
+                  </span>
                 </div>
 
                 <div
-                  className="palette-row"
+                  className="palette"
                   role="radiogroup"
-                  aria-label="انتخاب رنگ کارت"
+                  aria-label="رنگ کارت"
                 >
-                  {palettes.map((item) => (
-                    <button
-                      key={item.name}
-                      type="button"
-                      className={`swatch ${
-                        color === item.name
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        setColor(item.name)
-                      }
-                      aria-label={`انتخاب رنگ ${item.label}`}
-                      aria-pressed={
-                        color === item.name
-                      }
-                      style={
-                        {
-                          "--swatch":
-                            item.value,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <span
-                        style={{
-                          background:
-                            item.value,
-                        }}
-                      />
-                    </button>
-                  ))}
+                  {palettes.map(
+                    (item) => (
+                      <button
+                        key={item.name}
+                        type="button"
+                        className={`swatch ${
+                          color ===
+                          item.name
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          setColor(
+                            item.name
+                          )
+                        }
+                        aria-label={`انتخاب رنگ ${item.label}`}
+                        aria-pressed={
+                          color ===
+                          item.name
+                        }
+                        title={
+                          item.label
+                        }
+                        style={
+                          {
+                            "--swatch":
+                              item.value,
+                          } as React.CSSProperties
+                        }
+                      >
+                        <span
+                          style={{
+                            background:
+                              item.value,
+                          }}
+                        />
+                      </button>
+                    )
+                  )}
                 </div>
               </div>
             </div>
           )}
 
-          <div className="editor-actions">
-            <button
-              type="button"
-              className="primary-button"
-              onClick={shareCard}
-              disabled={
-                !canCreate || isSharing
-              }
-              aria-busy={isSharing}
-            >
-              <Icon
-                name="share"
-                size={17}
-              />
-
-              {isSharing
-                ? "در حال آماده‌سازی..."
-                : "اشتراک‌گذاری کارت"}
-            </button>
-
-            <div className="secondary-actions">
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={saveCard}
-                disabled={!canCreate}
-              >
-                <Icon name="check" size={16} />
-                ذخیره
-              </button>
-
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={exportCard}
-                disabled={!canCreate}
-              >
-                <Icon
-                  name="download"
-                  size={16}
-                />
-                دانلود PNG
-              </button>
-            </div>
-          </div>
-
-          <div className="action-note">
-            <span className="action-note-dot" />
-            کارتت را بساز و بعد هرجا خواستی آن را به
-            اشتراک بگذار.
-          </div>
+          
         </div>
 
-        <div className="preview-panel">
-          <div className="preview-heading">
-            <div>
-              <span className="step">02</span>
+        <div className="preview">
+          <div className="preview-header">
+            <span>
+              پیش‌نمایش
+            </span>
 
-              <div>
-                <h2>پیش‌نمایش زنده</h2>
-                <p>
-                  تغییراتت همین لحظه روی کارت دیده می‌شوند.
-                </p>
-              </div>
-            </div>
+            <span className="live">
+              <i />
+              زنده
+            </span>
           </div>
 
           <div className="preview-stage">
@@ -1048,166 +875,46 @@ export default function Home() {
               cardRef={cardRef}
             />
           </div>
+        </div>
 
-          <div className="preview-actions">
-            <button
-              type="button"
-              className="preview-share"
-              onClick={shareCard}
-              disabled={!canCreate || isSharing}
-            >
-              <Icon name="share" size={16} />
+        <button
+            type="button"
+            className="share-button"
+            disabled={
+              !canShare ||
+              isSharing
+            }
+            onClick={
+              shareCard
+            }
+          >
+            <Icon
+              name="share"
+              size={18}
+            />
+
+            <span>
               {isSharing
                 ? "در حال آماده‌سازی..."
                 : "اشتراک‌گذاری کارت"}
-            </button>
+            </span>
+          </button>
 
-            <button
-              type="button"
-              className="preview-download"
-              onClick={exportCard}
-              disabled={!canCreate}
-            >
-              <Icon
-                name="download"
-                size={16}
-              />
-              دانلود PNG
-            </button>
-          </div>
-
-          <div className="share-hint">
-            <div className="hint-icon">
-              <Icon name="share" size={16} />
-            </div>
-
-            <div>
-              <b>روی موبایل، Share Sheet باز می‌شود</b>
-
-              <span>
-                در مرورگرهای پشتیبانی‌شده، تصویر کارت مستقیماً
-                وارد منوی اشتراک‌گذاری گوشی می‌شود.
-              </span>
-            </div>
-          </div>
-        </div>
+          <button
+            type="button"
+            className="download-button"
+            disabled={!canShare}
+            onClick={
+              exportCard
+            }
+          >
+            <Icon
+              name="download"
+              size={16}
+            />
+            دانلود PNG
+          </button>
       </section>
-
-      <section className="collection-section">
-        <div className="section-heading">
-          <div>
-            <div className="eyebrow muted-eyebrow">
-              <Icon name="history" size={14} />
-              مجموعه من
-            </div>
-
-            <h2>
-              کارت‌هایی که ساخته‌ای.
-            </h2>
-          </div>
-
-          {saved.length > 0 && (
-            <div className="collection-meta">
-              <span className="count-pill">
-                {saved.length} کارت
-              </span>
-
-              {saved.length > 9 && (
-                <button
-                  type="button"
-                  className="collection-toggle"
-                  onClick={() =>
-                    setShowCollection(
-                      (prev) => !prev
-                    )
-                  }
-                >
-                  {showCollection
-                    ? "نمایش کمتر"
-                    : "مشاهده همه"}
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-
-        {saved.length ? (
-          <div className="saved-grid">
-            {(showCollection
-              ? saved
-              : saved.slice(0, 9)
-            ).map((card) => (
-              <button
-                type="button"
-                key={card.id}
-                className="saved-card"
-                onClick={() =>
-                  loadCard(card)
-                }
-              >
-                <span
-                  className="saved-accent"
-                  style={{
-                    background:
-                      palettes.find(
-                        (p) =>
-                          p.name ===
-                          card.color
-                      )?.value ||
-                      palettes[0].value,
-                  }}
-                />
-
-                <div className="saved-card-top">
-                  <strong>
-                    {card.word ||
-                      "بدون عنوان"}
-                  </strong>
-
-                  <span className="saved-open">
-                    باز کردن
-                  </span>
-                </div>
-
-                <span className="saved-meaning">
-                  {card.meanings
-                    .filter(Boolean)
-                    .slice(0, 1)
-                    .join(" · ") ||
-                    "هنوز معنی ندارد"}
-                </span>
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div className="empty-collection">
-            <div className="empty-icon">
-              <Icon name="book" size={20} />
-            </div>
-
-            <div>
-              <b>
-                هنوز کارتی ذخیره نکرده‌ای.
-              </b>
-
-              <span>
-                اولین کارتت را بساز و بعداً از همین‌جا
-                دوباره بازش کن.
-              </span>
-            </div>
-          </div>
-        )}
-      </section>
-
-      <footer className="site-footer">
-        <span>
-          Vocabulary Card Maker
-        </span>
-
-        <span>
-          برای یادگیری انگلیسی، نه فقط شناختن کلمه.
-        </span>
-      </footer>
 
       {toast && (
         <div
@@ -1215,23 +922,12 @@ export default function Home() {
           role="status"
           aria-live="polite"
         >
-          <Icon name="check" size={16} />
+          <Icon
+            name="check"
+            size={15}
+          />
 
-          <span>{toast}</span>
-
-          {toastAction && (
-            <button
-              type="button"
-              className="toast-action"
-              onClick={() => {
-                toastAction();
-                setToast("");
-                setToastAction(null);
-              }}
-            >
-              بازگردانی
-            </button>
-          )}
+          {toast}
         </div>
       )}
     </main>
