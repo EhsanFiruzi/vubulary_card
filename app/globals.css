@@ -1196,7 +1196,7 @@ select:focus-visible {
 
   color: rgba(255, 255, 255, 0.62);
 
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 800;
 
   letter-spacing: 0.06em;
@@ -1655,7 +1655,7 @@ select:focus-visible {
 
   .card-label {
     margin-bottom: 7px;
-    font-size: 11px;
+    font-size: 18px;
   }
 
   .card-meaning-inline {
@@ -1734,7 +1734,7 @@ select:focus-visible {
   }
 
   .card-label {
-    font-size: 10px;
+    font-size: 16px;
   }
 
   .card-meaning-inline {

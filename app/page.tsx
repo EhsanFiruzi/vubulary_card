@@ -373,6 +373,20 @@ function CardPreview({
 
         <div className="card-divider" />
 
+        
+
+        {data.example.trim() && (
+          <div className="card-section">
+            <span className="card-label" dir="ltr">
+              EXAMPLE
+            </span>
+
+            <p className="card-example" dir="ltr">
+              “{data.example}”
+            </p>
+          </div>
+        )}
+
         <div className="card-section">
           <span className="card-label" dir="rtl">
             معنی فارسی
@@ -388,18 +402,6 @@ function CardPreview({
             </div>
           )}
         </div>
-
-        {data.example.trim() && (
-          <div className="card-section">
-            <span className="card-label" dir="ltr">
-              EXAMPLE
-            </span>
-
-            <p className="card-example" dir="ltr">
-              “{data.example}”
-            </p>
-          </div>
-        )}
 
         {data.notes.trim() && (
           <div className="card-note" dir="rtl">
