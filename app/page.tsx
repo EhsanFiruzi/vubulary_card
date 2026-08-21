@@ -19,10 +19,24 @@ interface Palette {
 interface CardData {
   word: string;
   meanings: string[];
+  familyWords: string[];
+  wordType: string;
   example: string;
   notes: string;
   color: string;
 }
+
+const wordTypes = [
+  { value: "noun", label: "اسم (Noun)", short: "n" },
+  { value: "verb", label: "فعل (Verb)", short: "v" },
+  { value: "adjective", label: "صفت (Adjective)", short: "adj" },
+  { value: "adverb", label: "قید (Adverb)", short: "adv" },
+  { value: "pronoun", label: "ضمیر (Pronoun)", short: "pron" },
+  { value: "preposition", label: "حرف اضافه (Preposition)", short: "prep" },
+  { value: "conjunction", label: "حرف ربط (Conjunction)", short: "conj" },
+  { value: "interjection", label: "حرف ندا (Interjection)", short: "interj" },
+  { value: "determiner", label: "تعیین‌کننده (Determiner)", short: "det" },
+];
 
 const palettes: Palette[] = [
   {
@@ -265,6 +279,38 @@ function MeaningList({
   );
 }
 
+interface FamilyWordsProps {
+  familyWords: string[];
+  setFamilyWords: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+function FamilyWords({ familyWords, setFamilyWords }: FamilyWordsProps) {
+  const updateFamilyWord = (index: number, value: string) => {
+    setFamilyWords((current) => {
+      const next = [...current];
+      next[index] = value;
+      return next;
+    });
+  };
+
+  return (
+    <div className="family-list">
+      {familyWords.map((familyWord, index) => (
+        <input
+          key={index}
+          value={familyWord}
+          onChange={(event) => updateFamilyWord(index, event.target.value)}
+          placeholder={`هم‌خانواده ${index + 1}`}
+          aria-label={`هم‌خانواده ${index + 1}`}
+          dir="ltr"
+          autoComplete="off"
+          spellCheck={false}
+        />
+      ))}
+    </div>
+  );
+}
+
 interface CardPreviewProps {
   data: CardData;
   cardRef: React.RefObject<HTMLDivElement | null>;
@@ -279,10 +325,9 @@ function CardPreview({
       (item) => item.name === data.color
     ) || palettes[0];
 
-  const meanings =
-    data.meanings.filter(
-      (meaning) => meaning.trim()
-    );
+  const meanings = data.meanings.filter((meaning) => meaning.trim());
+  const familyWords = data.familyWords.filter((familyWord) => familyWord.trim());
+  const wordType = wordTypes.find((item) => item.value === data.wordType);
 
   const cardStyle = {
     "--accent": palette.value,
@@ -298,58 +343,47 @@ function CardPreview({
     >
       <div className="card-glow" />
 
-      <div className="card-top">
-        <span>VOCABULARY CARD</span>
+      {/*
+        card-main به صورت صریح dir="ltr" است. این چیزی فراتر از
+        CSS معمولی است: attribute دایرکشنِ HTML یک "bidi boundary"
+        واقعی می‌سازد که کل بلاک‌بندی (نه فقط متن) را چپ‌چین می‌کند،
+        حتی وقتی کل صفحه/والدهای بالاتر راست‌چین هستند. به همین
+        دلیل بود که فقط CSS direction روی card-word-row کافی نبود:
+        آن ردیف عرضِ fit-content دارد و طبق جهتِ *والدش* به لبه‌ی
+        شروع می‌چسبید، نه جهتِ خودش.
+      */}
+      <div className="card-main" dir="ltr">
+        <div className="card-word-row" dir="ltr">
+          <div className="card-word" dir="ltr">
+            {data.word.trim() || "Your word"}
+          </div>
 
-        <span>
-          #
-          {data.word.trim()
-            ? data.word
-                .trim()
-                .slice(0, 1)
-                .toUpperCase()
-            : "V"}
-        </span>
-      </div>
-
-      <div className="card-main">
-        <div className="card-word">
-          {data.word.trim() ||
-            "Your word"}
+          {wordType && (
+            <span className="card-word-type" title={wordType.label}>
+              {wordType.short}
+            </span>
+          )}
         </div>
 
-        <div className="card-tag">
-          ENGLISH WORD
-        </div>
+        {familyWords.length > 0 && (
+          <div className="card-family" dir="ltr">
+            {familyWords.join(" / ")}
+          </div>
+        )}
 
         <div className="card-divider" />
 
         <div className="card-section">
-          <span className="card-label">
+          <span className="card-label" dir="rtl">
             معنی فارسی
           </span>
 
           {meanings.length > 0 ? (
-            <div className="card-meanings">
-              {meanings.map(
-                (meaning, index) => (
-                  <div
-                    className="card-meaning"
-                    key={index}
-                  >
-                    <span>
-                      {index + 1}
-                    </span>
-
-                    <div dir="rtl">
-                      {meaning}
-                    </div>
-                  </div>
-                )
-              )}
+            <div className="card-meaning-inline" dir="rtl">
+              {meanings.join(" / ")}
             </div>
           ) : (
-            <div className="card-empty">
+            <div className="card-empty" dir="rtl">
               معنی کلمه اینجا نمایش داده می‌شود.
             </div>
           )}
@@ -357,18 +391,18 @@ function CardPreview({
 
         {data.example.trim() && (
           <div className="card-section">
-            <span className="card-label">
+            <span className="card-label" dir="ltr">
               EXAMPLE
             </span>
 
-            <p className="card-example">
+            <p className="card-example" dir="ltr">
               “{data.example}”
             </p>
           </div>
         )}
 
         {data.notes.trim() && (
-          <div className="card-note">
+          <div className="card-note" dir="rtl">
             <span>↳</span>
             <div dir="rtl">
               {data.notes}
@@ -377,7 +411,7 @@ function CardPreview({
         )}
       </div>
 
-      <div className="card-bottom">
+      <div className="card-bottom" dir="rtl">
         <span>
           یاد بگیر. استفاده کن.
         </span>
@@ -394,6 +428,12 @@ export default function Home() {
 
   const [meanings, setMeanings] =
     useState<string[]>([""]);
+
+  const [familyWords, setFamilyWords] =
+    useState<string[]>(["", "", ""]);
+
+  const [wordType, setWordType] =
+    useState("");
 
   const [example, setExample] =
     useState("");
@@ -420,6 +460,8 @@ export default function Home() {
     () => ({
       word,
       meanings,
+      familyWords,
+      wordType,
       example,
       notes,
       color,
@@ -427,6 +469,8 @@ export default function Home() {
     [
       word,
       meanings,
+      familyWords,
+      wordType,
       example,
       notes,
       color,
@@ -443,6 +487,8 @@ export default function Home() {
     Boolean(
       example.trim() ||
         notes.trim() ||
+        familyWords.some((familyWord) => familyWord.trim()) ||
+        Boolean(wordType) ||
         color !== "violet"
     );
 
@@ -679,7 +725,6 @@ export default function Home() {
                   )
                 }
                 placeholder="مثلاً resilient"
-                autoFocus
                 autoCapitalize="none"
                 autoComplete="off"
                 spellCheck={false}
@@ -723,7 +768,7 @@ export default function Home() {
               </span>
 
               <span className="details-subtitle">
-                مثال، توضیحات و رنگ کارت
+                مثال، هم‌خانواده، نوع کلمه و رنگ کارت
                 <span
                   className={`detail-status ${
                     hasDetails
@@ -748,6 +793,41 @@ export default function Home() {
 
           {detailsOpen && (
             <div className="details-content">
+              <div className="detail-field">
+                <label>
+                  هم‌خانواده‌ها
+                  <span>حداکثر ۳ مورد</span>
+                </label>
+
+                <FamilyWords
+                  familyWords={familyWords}
+                  setFamilyWords={setFamilyWords}
+                />
+              </div>
+
+              <div className="detail-field">
+                <label htmlFor="wordType">
+                  نوع کلمه
+                  <span>اختیاری</span>
+                </label>
+
+                <div className="select-wrap">
+                  <select
+                    id="wordType"
+                    value={wordType}
+                    onChange={(event) => setWordType(event.target.value)}
+                  >
+                    <option value="">انتخاب نوع کلمه</option>
+                    {wordTypes.map((item) => (
+                      <option key={item.value} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
+                  <Icon name="chevron" size={15} />
+                </div>
+              </div>
+
               <div className="detail-field">
                 <label htmlFor="example">
                   مثال در جمله
