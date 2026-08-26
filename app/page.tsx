@@ -726,99 +726,91 @@ export default function Home() {
   };
 
   const shareCard = async () => {
-    if (
-      !cardRef.current ||
-      isSharing
-    ) {
-      return;
-    }
+  if (!cardRef.current || isSharing) {
+    return;
+  }
 
-    if (!validate()) {
-      return;
-    }
+  if (!validate()) {
+    return;
+  }
 
-    if (
-      typeof navigator.share !==
-      "function"
-    ) {
-      showToast(
-        "اشتراک‌گذاری در این مرورگر پشتیبانی نمی‌شود."
-      );
-      return;
-    }
+  if (typeof navigator.share !== "function") {
+    showToast(
+      "اشتراک‌گذاری در این مرورگر پشتیبانی نمی‌شود."
+    );
+    return;
+  }
 
-    setIsSharing(true);
+  setIsSharing(true);
 
-    try {
-      const dataUrl =
-        await createPng();
+  try {
+    // ساخت تصویر فقط در حافظه
+    const dataUrl = await createPng();
 
-      const response =
-        await fetch(dataUrl);
+    // تبدیل Data URL به Blob در حافظه
+    const response = await fetch(dataUrl);
+    const blob = await response.blob();
 
-      const blob =
-        await response.blob();
+    const safeWord =
+      word
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-") ||
+      "vocabulary-card";
 
-      const safeWord =
-        word
-          .trim()
-          .toLowerCase()
-          .replace(
-            /[^a-z0-9]+/g,
-            "-"
-          ) ||
-        "vocabulary-card";
-
-      const file = new File(
-        [blob],
-        `${safeWord}-vocabulary-card.png`,
-        {
-          type: "image/png",
-        }
-      );
-
-      if (
-        typeof navigator.canShare ===
-          "function" &&
-        !navigator.canShare({
-          files: [file],
-        })
-      ) {
-        showToast(
-          "اشتراک‌گذاری عکس در این مرورگر پشتیبانی نمی‌شود."
-        );
-        return;
+    // فایل موقت فقط برای Web Share API
+    const file = new File(
+      [blob],
+      `${safeWord}-vocabulary-card.png`,
+      {
+        type: "image/png",
       }
+    );
 
-      await navigator.share({
-        title:
-          `${word.trim()} — کارت لغت`,
-        
+    // بررسی پشتیبانی مرورگر از اشتراک‌گذاری فایل
+    if (
+      typeof navigator.canShare === "function" &&
+      !navigator.canShare({
         files: [file],
-      });
-    } catch (error: unknown) {
-      const err =
-        error as Error;
-
-      if (
-        err?.name ===
-        "AbortError"
-      ) {
-        return;
-      }
-
-      console.error(
-        "Share failed:",
-        error
-      );
-
+      })
+    ) {
       showToast(
-        "اشتراک‌گذاری انجام نشد."
+        "اشتراک‌گذاری عکس در این مرورگر پشتیبانی نمی‌شود."
       );
-    } finally {
-      setIsSharing(false);
+      return;
     }
-  };
+
+    /*
+     * مهم:
+     * اینجا هیچ دانلود یا ذخیره‌ای انجام نمی‌شود.
+     *
+     * فایل فقط به Share Sheet سیستم‌عامل
+     * تحویل داده می‌شود.
+     */
+    await navigator.share({
+      title: `${word.trim()} — کارت لغت`,
+      files: [file],
+    });
+  } catch (error: unknown) {
+    const err = error as Error;
+
+    // کاربر Share Sheet را بسته است.
+    if (err?.name === "AbortError") {
+      return;
+    }
+
+    console.error(
+      "Share failed:",
+      error
+    );
+
+    showToast(
+      "اشتراک‌گذاری انجام نشد."
+    );
+  } finally {
+    setIsSharing(false);
+  }
+};
 
   return (
     <main className="app">
