@@ -480,7 +480,7 @@ function CardPreview({
             style={{
               display: "-webkit-box",
               WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 10,
+              WebkitLineClamp: 20,
               overflow: "hidden",
               wordBreak: "break-word",
               overflowWrap: "anywhere",
