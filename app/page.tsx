@@ -480,7 +480,7 @@ function CardPreview({
             style={{
               display: "-webkit-box",
               WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 5,
+              WebkitLineClamp: 10,
               overflow: "hidden",
               wordBreak: "break-word",
               overflowWrap: "anywhere",
@@ -488,7 +488,12 @@ function CardPreview({
           >
             <span>↳</span>
 
-            <div dir="rtl">
+            <div
+              dir="rtl"
+              style={{
+                whiteSpace: "pre-line",
+              }}
+            >
               {data.notes.trim()}
             </div>
           </div>
@@ -499,9 +504,7 @@ function CardPreview({
         className="card-bottom"
         dir="rtl"
       >
-        <span>
-          یاد بگیر. استفاده کن.
-        </span>
+        
 
         <span className="card-dot" />
       </div>
