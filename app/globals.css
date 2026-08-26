@@ -212,6 +212,34 @@ select:focus-visible {
   line-height: 1.4;
 }
 
+/* =========================
+   Required
+========================= */
+
+.required-mark {
+  color: #ff8b8b;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  transform: translateY(-1px);
+}
+
+.field-hint {
+  margin-inline-start: auto;
+
+  color: #716b79;
+
+  font-size: 9px;
+  font-weight: 500;
+}
+
+/* =========================
+   Main Word Input
+========================= */
+
 .input-wrap {
   width: 100%;
   height: 54px;
@@ -236,6 +264,7 @@ select:focus-visible {
 
 .input-wrap svg {
   flex: none;
+
   color: #827b90;
 }
 
@@ -388,6 +417,7 @@ select:focus-visible {
 
 .remove-button:hover {
   color: #fff;
+
   background: rgba(255, 255, 255, 0.07);
 }
 
@@ -396,9 +426,11 @@ select:focus-visible {
 
   display: inline-flex;
   align-items: center;
+
   gap: 5px;
 
   margin-top: 2px;
+
   padding: 4px 2px;
 
   border: 0;
@@ -410,7 +442,8 @@ select:focus-visible {
   font-size: 11px;
   font-weight: 650;
 
-  transition: color 0.18s ease;
+  transition:
+    color 0.18s ease;
 }
 
 .add-meaning:hover {
@@ -418,161 +451,48 @@ select:focus-visible {
 }
 
 /* =========================
-   Details
+   Example Field
 ========================= */
 
-.details-toggle {
+/*
+  این بخش عمداً مستقل است تا
+  textarea مثال، ظاهر مناسب و
+  متفاوت از توضیحات داشته باشد.
+*/
+
+.example-field {
+  position: relative;
+}
+
+/*
+  این selector هم برای حالتی است که
+  className="field example-field"
+  داشته باشی.
+*/
+.example-field textarea,
+.field #example {
   width: 100%;
 
-  margin-top: 22px;
-  padding: 14px 0;
+  min-height: 102px;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  padding: 14px 15px;
 
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  resize: vertical;
 
-  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.085);
 
-  color: #f0edf5;
-
-  text-align: right;
-
-  /* جلوگیری از تاخیر ۳۰۰ میلی‌ثانیه‌ای تپ و تداخل با زوم دوبار-تپ در موبایل */
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.details-left {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.details-title {
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.details-subtitle {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-
-  color: var(--dim);
-
-  font-size: 10px;
-  line-height: 1.5;
-}
-
-.detail-status {
-  flex: none;
-
-  padding: 3px 7px;
-
-  border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.035);
-
-  color: #74707c;
-
-  font-size: 9px;
-}
-
-.detail-status.filled {
-  color: #a99dff;
-  background: rgba(124, 92, 255, 0.09);
-}
-
-.details-chevron {
-  width: 29px;
-  height: 29px;
-
-  flex: none;
-
-  display: grid;
-  place-items: center;
-
-  color: #7f788b;
-
-  border-radius: 9px;
-
-  transition:
-    transform 0.25s ease,
-    background 0.2s ease,
-    color 0.2s ease;
-}
-
-.details-toggle:hover .details-chevron {
-  color: #aaa1bd;
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.details-toggle.open .details-chevron {
-  transform: rotate(180deg);
-}
-
-.details-content {
-  padding-top: 18px;
-
-  animation: details-in 0.18s ease;
-}
-
-@keyframes details-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.detail-field + .detail-field {
-  margin-top: 18px;
-}
-
-.detail-field > label span {
-  color: #77717f;
-  font-size: 9px;
-  font-weight: 500;
-}
-
-/* =========================
-   Family Words
-========================= */
-
-.family-list {
-  width: 100%;
-
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.family-list input {
-  width: 100%;
-  min-width: 0;
-  height: 46px;
-
-  padding: 0 12px;
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  border-radius: 14px;
 
   outline: 0;
 
-  background: rgba(255, 255, 255, 0.022);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.028),
+      rgba(255, 255, 255, 0.018)
+    );
 
-  color: #f7f5fa;
+  color: #f5f3f8;
 
   font-family:
     Inter,
@@ -580,11 +500,15 @@ select:focus-visible {
     system-ui,
     sans-serif;
 
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 450;
 
-  text-align: left;
+  line-height: 1.75;
+
   direction: ltr;
+  text-align: left;
+
+  overflow-wrap: anywhere;
 
   transition:
     border-color 0.2s ease,
@@ -592,26 +516,60 @@ select:focus-visible {
     box-shadow 0.2s ease;
 }
 
-.family-list input::placeholder {
-  color: #605b69;
+.example-field textarea:hover,
+.field #example:hover {
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+.example-field textarea:focus,
+.field #example:focus {
+  border-color: rgba(139, 116, 255, 0.62);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(124, 92, 255, 0.045),
+      rgba(124, 92, 255, 0.02)
+    );
+
+  box-shadow:
+    0 0 0 4px rgba(124, 92, 255, 0.075),
+    0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.example-field textarea::placeholder,
+.field #example::placeholder {
+  color: #625e6c;
+
   opacity: 1;
 }
 
-.family-list input:focus {
-  border-color: rgba(139, 116, 255, 0.5);
+/*
+  Label مربوط به Example
+*/
 
-  background: rgba(124, 92, 255, 0.03);
+.example-field > label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
 
-  box-shadow:
-    0 0 0 3px rgba(124, 92, 255, 0.055);
+  margin: 0 0 9px;
+
+  color: #ebe7f2;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  line-height: 1.4;
 }
 
 /* =========================
-   Word Type Select
+   Select
 ========================= */
 
 .select-wrap {
   position: relative;
+
   width: 100%;
 }
 
@@ -625,6 +583,7 @@ select:focus-visible {
   padding: 0 42px 0 13px;
 
   border: 1px solid rgba(255, 255, 255, 0.08);
+
   border-radius: 12px;
 
   outline: 0;
@@ -662,6 +621,7 @@ select:focus-visible {
 
 .select-wrap select option {
   color: #17141f;
+
   background: #fff;
 }
 
@@ -679,7 +639,215 @@ select:focus-visible {
 }
 
 /* =========================
-   Textareas
+   Details
+========================= */
+
+.details-toggle {
+  width: 100%;
+
+  margin-top: 22px;
+
+  padding: 14px 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border: 0;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: transparent;
+
+  color: #f0edf5;
+
+  text-align: right;
+
+  touch-action: manipulation;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.details-left {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.details-title {
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.details-subtitle {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: var(--dim);
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+.detail-status {
+  flex: none;
+
+  padding: 3px 7px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: #74707c;
+
+  font-size: 9px;
+}
+
+.detail-status.filled {
+  color: #a99dff;
+
+  background: rgba(124, 92, 255, 0.09);
+}
+
+.details-chevron {
+  width: 29px;
+  height: 29px;
+
+  flex: none;
+
+  display: grid;
+  place-items: center;
+
+  color: #7f788b;
+
+  border-radius: 9px;
+
+  transition:
+    transform 0.25s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.details-toggle:hover .details-chevron {
+  color: #aaa1bd;
+
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.details-toggle.open .details-chevron {
+  transform: rotate(180deg);
+}
+
+.details-content {
+  padding-top: 18px;
+
+  animation:
+    details-in 0.18s ease;
+}
+
+@keyframes details-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+.detail-field + .detail-field {
+  margin-top: 18px;
+}
+
+.detail-field > label span {
+  color: #77717f;
+
+  font-size: 9px;
+  font-weight: 500;
+}
+
+/* =========================
+   Family Words
+========================= */
+
+.family-list {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.family-list input {
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+
+  padding: 0 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  outline: 0;
+
+  background: rgba(255, 255, 255, 0.022);
+
+  color: #f7f5fa;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  text-align: left;
+  direction: ltr;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.family-list input::placeholder {
+  color: #605b69;
+
+  opacity: 1;
+}
+
+.family-list input:focus {
+  border-color: rgba(139, 116, 255, 0.5);
+
+  background: rgba(124, 92, 255, 0.03);
+
+  box-shadow:
+    0 0 0 3px rgba(124, 92, 255, 0.055);
+}
+
+/* =========================
+   Details Textareas
 ========================= */
 
 .detail-field textarea {
@@ -687,13 +855,15 @@ select:focus-visible {
 
   margin-top: 1px;
 
-  min-height: 84px;
+  min-height: 132px;
+  max-height: 170px;
 
   padding: 12px 13px;
 
   resize: vertical;
 
   border: 1px solid rgba(255, 255, 255, 0.08);
+
   border-radius: 12px;
 
   outline: 0;
@@ -706,6 +876,8 @@ select:focus-visible {
   font-weight: 450;
 
   line-height: 1.7;
+
+  overflow-y: auto;
 
   transition:
     border-color 0.2s ease,
@@ -726,6 +898,24 @@ select:focus-visible {
   color: #615d69;
 }
 
+.character-counter {
+  margin-top: 6px;
+
+  color: #686370;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 9px;
+
+  text-align: left;
+
+  direction: ltr;
+}
+
 /* =========================
    Color
 ========================= */
@@ -736,6 +926,7 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   gap: 18px;
 }
 
@@ -753,12 +944,14 @@ select:focus-visible {
   color: var(--dim);
 
   font-size: 9px;
+
   line-height: 1.5;
 }
 
 .palette {
   display: flex;
   align-items: center;
+
   gap: 8px;
 
   flex: none;
@@ -774,6 +967,7 @@ select:focus-visible {
   padding: 0;
 
   border: 1px solid transparent;
+
   border-radius: 10px;
 
   background: transparent;
@@ -784,7 +978,8 @@ select:focus-visible {
 }
 
 .swatch:hover {
-  transform: translateY(-1px);
+  transform:
+    translateY(-1px);
 }
 
 .swatch > span {
@@ -794,18 +989,21 @@ select:focus-visible {
   border-radius: 7px;
 
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    inset 0 0 0 1px
+    rgba(255, 255, 255, 0.25);
 }
 
 .swatch.selected {
-  border-color: rgba(255, 255, 255, 0.32);
+  border-color:
+    rgba(255, 255, 255, 0.32);
 }
 
 .swatch.selected > span {
   box-shadow:
     0 0 0 2px #0e0d14,
     0 0 0 4px var(--swatch),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    inset 0 0 0 1px
+    rgba(255, 255, 255, 0.22);
 }
 
 /* =========================
@@ -817,14 +1015,18 @@ select:focus-visible {
 
   min-height: 48px;
 
+  grid-column: 1;
+
   margin-top: 25px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 8px;
 
-  border: 1px solid rgba(148, 126, 255, 0.5);
+  border: 1px solid
+    rgba(148, 126, 255, 0.5);
 
   border-radius: 13px;
 
@@ -850,7 +1052,8 @@ select:focus-visible {
 }
 
 .share-button:hover:not(:disabled) {
-  transform: translateY(-1px);
+  transform:
+    translateY(-1px);
 
   box-shadow:
     0 15px 34px
@@ -861,19 +1064,24 @@ select:focus-visible {
   width: 100%;
   height: 40px;
 
+  grid-column: 1;
+
   margin-top: 8px;
-  margin-bottom: 24px;
+
+  margin-bottom: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 7px;
 
   border: 1px solid var(--border);
 
   border-radius: 12px;
 
-  background: rgba(255, 255, 255, 0.025);
+  background:
+    rgba(255, 255, 255, 0.025);
 
   color: #aaa4b4;
 
@@ -884,7 +1092,23 @@ select:focus-visible {
 .download-button:hover:not(:disabled) {
   color: #fff;
 
-  background: rgba(255, 255, 255, 0.055);
+  background:
+    rgba(255, 255, 255, 0.055);
+}
+
+.required-hint {
+  grid-column: 1;
+
+  margin: 8px 0 24px;
+
+  color: #716c78;
+
+  font-size: 9px;
+  font-weight: 500;
+
+  line-height: 1.5;
+
+  text-align: center;
 }
 
 /* =========================
@@ -893,6 +1117,10 @@ select:focus-visible {
 
 .preview {
   padding: 18px;
+
+  grid-column: 2;
+
+  grid-row: 1 / span 4;
 }
 
 .preview-header {
@@ -913,6 +1141,7 @@ select:focus-visible {
 .live {
   display: flex;
   align-items: center;
+
   gap: 6px;
 
   color: #7e7888;
@@ -936,20 +1165,22 @@ select:focus-visible {
 .preview-stage {
   min-height: 535px;
 
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 
   padding: 24px 18px;
 
   overflow: hidden;
 
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid
+    rgba(255, 255, 255, 0.05);
 
   border-radius: 18px;
 
   background:
     radial-gradient(
-      circle at 50% 40%,
+      circle at 50% 20%,
       rgba(124, 92, 255, 0.12),
       transparent 48%
     ),
@@ -962,9 +1193,17 @@ select:focus-visible {
 
 .card-export {
   width: min(100%, 540px);
-  aspect-ratio: 1 / 1;
 
   position: relative;
+
+  /*
+    دیگر aspect-ratio نداریم.
+    ارتفاع با محتوای واقعی تعیین می‌شود.
+  */
+  height: auto;
+
+  min-height: 320px;
+
   overflow: hidden;
 
   display: flex;
@@ -974,7 +1213,8 @@ select:focus-visible {
 
   border-radius: 28px;
 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
 
   background:
     radial-gradient(
@@ -989,12 +1229,17 @@ select:focus-visible {
     );
 
   box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.45),
-    0 0 50px var(--glow);
+    0 25px 60px
+    rgba(0, 0, 0, 0.45),
+    0 0 50px
+    var(--glow);
+
+  flex-shrink: 0;
 }
 
 .card-glow {
   position: absolute;
+
   inset: 0;
 
   pointer-events: none;
@@ -1017,70 +1262,56 @@ select:focus-visible {
     );
 }
 
-.card-top {
-  position: relative;
-  z-index: 1;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  color: rgba(255, 255, 255, 0.45);
-
-  font-size: 8px;
-  font-weight: 800;
-
-  letter-spacing: 0.16em;
-
-  direction: ltr;
-  text-align: left;
-}
+/* =========================
+   Card Main
+========================= */
 
 .card-main {
   position: relative;
+
   z-index: 1;
 
-  /* Prevents excessive empty space above the main content. */
+  width: 100%;
+
+  height: auto;
+
+  min-height: 0;
+
+  flex: 0 0 auto;
+
   margin: 0;
 
-  /*
-    نکته‌ی مهم: بلاک‌های width:fit-content طبق جهتِ *والد*
-    به لبه‌ی شروع می‌چسبند، نه جهتِ خودشان. پس کل card-main باید
-    ltr باشد تا ردیف کلمه واقعاً به چپ بچسبد؛ بخش‌های فارسی
-    (برچسب معنی، خودِ معنی، یادداشت) با dir="rtl" روی خودشان
-    صراحتاً راست‌چین نگه داشته می‌شوند.
-  */
   direction: ltr;
 }
 
-/*
-  کلمه همیشه چپ‌چین است (چون انگلیسی است) و بج نوع کلمه
-  دقیقاً بعد از آن (سمت راستِ کلمه در چیدمان LTR) می‌آید.
-  align-items روی baseline است تا بج کوچک با خط پایه‌ی
-  حروف کلمه‌ی بزرگ هم‌تراز شود، نه وسط ارتفاعش.
-*/
 .card-word-row {
   width: fit-content;
+
   max-width: 100%;
 
   display: flex;
+
   align-items: baseline;
+
   justify-content: flex-start;
+
   gap: 11px;
 
   direction: ltr;
+
   text-align: left;
 
-  /* ایزوله کردن کامل بافت bidi این ردیف از محیط RTL اطرافش */
   unicode-bidi: isolate;
 }
 
-
 .card-word {
   min-width: 0;
+
   max-width: 100%;
 
   overflow-wrap: anywhere;
+
+  word-break: break-word;
 
   color: #fff;
 
@@ -1090,11 +1321,13 @@ select:focus-visible {
     system-ui,
     sans-serif;
 
-  /*
-    کمی کوچکتر از قبل تا کلمه،
-    نوع کلمه و فضای اطراف متعادل بمانند.
-  */
-  font-size: clamp(46px, 7vw, 78px);
+  font-size:
+    clamp(
+      46px,
+      7vw,
+      78px
+    );
+
   font-weight: 790;
 
   line-height: 0.96;
@@ -1102,31 +1335,35 @@ select:focus-visible {
   letter-spacing: -0.06em;
 
   direction: ltr;
+
   text-align: left;
+
   unicode-bidi: plaintext;
 
   white-space: normal;
 }
 
-
 .card-word-type {
   flex: none;
+
   align-self: center;
 
   min-width: 35px;
   height: 28px;
 
-  margin: 0;
   padding: 0 8px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  border: 1px solid
+    rgba(255, 255, 255, 0.11);
+
   border-radius: 9px;
 
-  background: rgba(255, 255, 255, 0.055);
+  background:
+    rgba(255, 255, 255, 0.055);
 
   color: var(--accent);
 
@@ -1137,20 +1374,23 @@ select:focus-visible {
     sans-serif;
 
   font-size: 11px;
+
   font-weight: 800;
 
   line-height: 1;
+
   text-transform: lowercase;
 
   box-shadow:
-    inset 0 0 12px rgba(255, 255, 255, 0.02);
+    inset 0 0 12px
+    rgba(255, 255, 255, 0.02);
 }
-
 
 .card-family {
   margin-top: 12px;
 
-  color: rgba(255, 255, 255, 0.56);
+  color:
+    rgba(255, 255, 255, 0.56);
 
   font-family:
     Inter,
@@ -1159,6 +1399,7 @@ select:focus-visible {
     sans-serif;
 
   font-size: 12px;
+
   font-weight: 500;
 
   line-height: 1.55;
@@ -1166,13 +1407,17 @@ select:focus-visible {
   letter-spacing: -0.01em;
 
   direction: ltr;
+
   text-align: left;
 
   overflow-wrap: anywhere;
+
+  word-break: break-word;
 }
 
-
 .card-divider {
+  width: 100%;
+
   height: 1px;
 
   margin-top: 20px;
@@ -1186,6 +1431,10 @@ select:focus-visible {
 }
 
 .card-section {
+  width: 100%;
+
+  min-width: 0;
+
   margin-top: 18px;
 }
 
@@ -1194,9 +1443,11 @@ select:focus-visible {
 
   margin-bottom: 9px;
 
-  color: rgba(255, 255, 255, 0.62);
+  color:
+    rgba(255, 255, 255, 0.62);
 
   font-size: 18px;
+
   font-weight: 800;
 
   letter-spacing: 0.06em;
@@ -1204,12 +1455,9 @@ select:focus-visible {
   line-height: 1.3;
 }
 
-/*
-  فونت معنی فارسی بزرگ‌تر و خواناتر شد (19px -> 22px)
-  و line-height هم کمی بازتر شد تا در ابعاد کارت مربعی
-  خوانایی متن راست‌چین بهتر باشد.
-*/
 .card-meaning-inline {
+  width: 100%;
+
   color: #f5f1f7;
 
   font-family:
@@ -1217,37 +1465,48 @@ select:focus-visible {
     sans-serif;
 
   font-size: 22px;
+
   font-weight: 540;
 
   line-height: 1.85;
 
   direction: rtl;
+
   text-align: right;
 
   overflow-wrap: anywhere;
-}
 
+  word-break: break-word;
+}
 
 .card-meanings {
   display: flex;
+
   flex-direction: column;
+
   gap: 8px;
 }
 
 .card-meaning {
   display: flex;
+
   align-items: flex-start;
+
   gap: 10px;
 
   color: #f2eff7;
 
   font-size: 17px;
+
   font-weight: 520;
 
   line-height: 1.55;
 
   direction: rtl;
+
   text-align: right;
+
+  overflow-wrap: anywhere;
 }
 
 .card-meaning > span {
@@ -1259,15 +1518,18 @@ select:focus-visible {
   margin-top: 2px;
 
   display: grid;
+
   place-items: center;
 
   border-radius: 7px;
 
-  background: var(--accent);
+  background:
+    var(--accent);
 
   color: #fff;
 
   font-size: 10px;
+
   font-weight: 800;
 }
 
@@ -1279,14 +1541,17 @@ select:focus-visible {
   line-height: 1.5;
 
   direction: rtl;
+
   text-align: right;
 }
 
-/*
-  فونت مثال هم بزرگ‌تر و خواناتر شد (15px -> 16.5px)
-  با line-height بازتر برای خوانایی بهتر جمله‌ی انگلیسی.
-*/
+/* =========================
+   Card Example
+========================= */
+
 .card-example {
+  width: 100%;
+
   margin: 0;
 
   color: #ebe7f0;
@@ -1298,28 +1563,39 @@ select:focus-visible {
     sans-serif;
 
   font-size: 16.5px;
+
   font-weight: 450;
 
   line-height: 1.8;
 
   direction: ltr;
+
   text-align: left;
+
+  overflow-wrap: anywhere;
 
   word-break: break-word;
 }
 
+/* =========================
+   Card Note
+========================= */
 
 .card-note {
+  width: 100%;
+
   margin-top: 15px;
 
-  display: flex;
+  display: -webkit-box;
+
   align-items: flex-start;
 
   gap: 8px;
 
   padding-left: 10px;
 
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid
+    var(--accent);
 
   color: #b7b2bd;
 
@@ -1332,26 +1608,58 @@ select:focus-visible {
   line-height: 1.65;
 
   direction: rtl;
+
   text-align: right;
+
+  overflow-wrap: anywhere;
+
+  word-break: break-word;
+
+  /*
+    حداکثر 5 خط.
+  */
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 5;
+
+  line-clamp: 5;
+
+  overflow: hidden;
 }
 
 .card-note > span {
   flex: none;
+
   color: var(--accent);
+}
+
+.card-note > div {
+  min-width: 0;
+
+  overflow-wrap: anywhere;
+
+  word-break: break-word;
 }
 
 .card-bottom {
   position: relative;
+
   z-index: 1;
 
-  margin-top: auto;
+  flex: 0 0 auto;
+
+  margin-top: 22px;
+
   padding-top: 18px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  color: rgba(255, 255, 255, 0.42);
+  color:
+    rgba(255, 255, 255, 0.42);
 
   font-size: 8px;
 
@@ -1362,12 +1670,16 @@ select:focus-visible {
   width: 7px;
   height: 7px;
 
+  flex: none;
+
   border-radius: 50%;
 
-  background: var(--accent);
+  background:
+    var(--accent);
 
   box-shadow:
-    0 0 15px var(--accent);
+    0 0 15px
+    var(--accent);
 }
 
 /* =========================
@@ -1378,13 +1690,17 @@ select:focus-visible {
   position: fixed;
 
   left: 50%;
+
   bottom: 22px;
 
-  transform: translateX(-50%);
+  transform:
+    translateX(-50%);
 
-  max-width: calc(100vw - 28px);
+  max-width:
+    calc(100vw - 28px);
 
   display: flex;
+
   align-items: center;
 
   gap: 7px;
@@ -1398,12 +1714,39 @@ select:focus-visible {
   color: #17141e;
 
   font-size: 11px;
+
   font-weight: 750;
 
   box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.35);
+    0 15px 35px
+    rgba(0, 0, 0, 0.35);
 
   z-index: 50;
+
+  animation:
+    toast-in 0.22s ease;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translate(
+        -50%,
+        8px
+      );
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translate(
+        -50%,
+        0
+      );
+  }
 }
 
 /* =========================
@@ -1415,16 +1758,33 @@ select:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .preview {
+    grid-column: auto;
+
+    grid-row: auto;
+  }
+
+  .share-button,
+  .download-button,
+  .required-hint {
+    grid-column: auto;
+  }
+
   .preview-stage {
     min-height: unset;
   }
 
   .card-export {
-    width: min(100%, 560px);
+    width:
+      min(100%, 560px);
   }
 
   .family-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
   }
 }
 
@@ -1434,7 +1794,10 @@ select:focus-visible {
 
 @media (max-width: 600px) {
   .app {
-    padding: 0 12px 24px;
+    padding:
+      0
+      12px
+      24px;
   }
 
   .header {
@@ -1443,11 +1806,13 @@ select:focus-visible {
 
   .creator {
     margin-top: 17px;
+
     gap: 12px;
   }
 
   .editor {
     padding: 16px;
+
     border-radius: 19px;
   }
 
@@ -1469,11 +1834,19 @@ select:focus-visible {
     font-size: 11px;
   }
 
-  /* Main word */
+  .field-hint {
+    font-size: 8px;
+  }
+
+  /* Main Word */
 
   .input-wrap {
     height: 51px;
-    padding: 0 12px;
+
+    padding:
+      0
+      12px;
+
     border-radius: 13px;
   }
 
@@ -1485,6 +1858,7 @@ select:focus-visible {
 
   .meaning-row {
     min-height: 45px;
+
     border-radius: 11px;
   }
 
@@ -1495,6 +1869,7 @@ select:focus-visible {
   .meaning-number {
     width: 21px;
     height: 21px;
+
     font-size: 9px;
   }
 
@@ -1503,11 +1878,36 @@ select:focus-visible {
     height: 28px;
   }
 
+  /* =========================
+     Example
+  ========================= */
+
+  .example-field textarea,
+  .field #example {
+    min-height: 96px;
+
+    padding:
+      12px;
+
+    border-radius: 13px;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+  }
+
+  .example-field > label {
+    font-size: 11px;
+  }
+
   /* Details */
 
   .details-toggle {
     margin-top: 19px;
-    padding: 12px 0;
+
+    padding:
+      12px
+      0;
   }
 
   .details-title {
@@ -1526,26 +1926,31 @@ select:focus-visible {
     margin-top: 16px;
   }
 
-  /* Family words become one column on phones */
+  /* Family */
 
   .family-list {
     grid-template-columns: 1fr;
+
     gap: 7px;
   }
 
   .family-list input {
     height: 43px;
+
     border-radius: 11px;
+
     font-size: 12px;
   }
 
-  /* Word type */
+  /* Select */
 
   .select-wrap select {
     height: 44px;
+
     border-radius: 11px;
 
     padding-left: 12px;
+
     padding-right: 40px;
 
     font-size: 12px;
@@ -1555,24 +1960,35 @@ select:focus-visible {
     right: 12px;
   }
 
-  /* Textareas */
+  /* Details Textareas */
 
   .detail-field textarea {
-    min-height: 78px;
+    min-height: 125px;
 
-    padding: 10px 11px;
+    max-height: 160px;
+
+    padding:
+      10px
+      11px;
 
     border-radius: 11px;
 
     font-size: 11px;
+
     line-height: 1.65;
+  }
+
+  .character-counter {
+    font-size: 8px;
   }
 
   /* Colors */
 
   .color-field {
     align-items: flex-start;
+
     flex-direction: column;
+
     gap: 11px;
 
     margin-top: 18px;
@@ -1580,6 +1996,7 @@ select:focus-visible {
 
   .palette {
     width: 100%;
+
     justify-content: flex-start;
   }
 
@@ -1589,27 +2006,41 @@ select:focus-visible {
     margin-top: 21px;
   }
 
+  .required-hint {
+    margin-bottom: 12px;
+
+    font-size: 8px;
+  }
+
   /* Preview */
 
   .preview {
     padding: 12px;
+
     border-radius: 19px;
   }
 
   .preview-stage {
+    min-height: 0;
+
     padding: 10px;
+
     border-radius: 15px;
   }
 
   /* Card */
 
   .card-export {
-    padding: 22px 20px 18px;
-    border-radius: 22px;
-  }
+    width: 100%;
 
-  .card-word-row {
-    gap: 10px;
+    min-height: 300px;
+
+    padding:
+      22px
+      20px
+      18px;
+
+    border-radius: 22px;
   }
 
   .card-word-row {
@@ -1618,20 +2049,30 @@ select:focus-visible {
 
   .card-word {
     min-width: 0;
+
     max-width: 100%;
 
-    font-size: clamp(34px, 10.5vw, 48px);
+    font-size:
+      clamp(
+        34px,
+        10.5vw,
+        48px
+      );
 
     line-height: 0.98;
-    letter-spacing: -0.055em;
+
+    letter-spacing:
+      -0.055em;
   }
 
   .card-word-type {
     min-width: 29px;
+
     height: 24px;
 
-    margin-top: 2px;
-    padding: 0 6px;
+    padding:
+      0
+      6px;
 
     border-radius: 8px;
 
@@ -1642,6 +2083,7 @@ select:focus-visible {
     margin-top: 11px;
 
     font-size: 9px;
+
     line-height: 1.55;
   }
 
@@ -1655,12 +2097,15 @@ select:focus-visible {
 
   .card-label {
     margin-bottom: 7px;
-    font-size: 18px;
+
+    font-size: 17px;
   }
 
   .card-meaning-inline {
     font-size: 16px;
+
     font-weight: 530;
+
     line-height: 1.9;
   }
 
@@ -1670,34 +2115,44 @@ select:focus-visible {
 
   .card-meaning {
     gap: 8px;
+
     font-size: 13px;
+
     line-height: 1.55;
   }
 
   .card-meaning > span {
     width: 19px;
     height: 19px;
+
     font-size: 9px;
   }
 
   .card-example {
     font-size: 13.5px;
+
     line-height: 1.85;
   }
 
   .card-note {
+    margin-top: 13px;
+
     font-size: 11px;
+
     line-height: 1.6;
   }
 
   .card-bottom {
+    margin-top: 18px;
+
     padding-top: 14px;
+
     font-size: 7px;
   }
 }
 
 /* =========================
-   Small phones
+   Small Phones
 ========================= */
 
 @media (max-width: 390px) {
@@ -1713,19 +2168,47 @@ select:focus-visible {
     padding: 10px;
   }
 
+  /* Example */
+
+  .example-field textarea,
+  .field #example {
+    min-height: 92px;
+
+    padding:
+      11px;
+
+    font-size: 11.5px;
+
+    line-height: 1.7;
+  }
+
   .card-export {
-    padding: 19px 17px 16px;
+    min-height: 280px;
+
+    padding:
+      19px
+      17px
+      16px;
   }
 
   .card-word {
-    font-size: clamp(30px, 10vw, 38px);
+    font-size:
+      clamp(
+        30px,
+        10vw,
+        38px
+      );
   }
 
   .card-word-type {
     min-width: 27px;
+
     height: 22px;
 
-    padding: 0 5px;
+    padding:
+      0
+      5px;
+
     font-size: 8px;
   }
 
@@ -1734,11 +2217,12 @@ select:focus-visible {
   }
 
   .card-label {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .card-meaning-inline {
     font-size: 15px;
+
     line-height: 1.85;
   }
 
@@ -1748,6 +2232,7 @@ select:focus-visible {
 
   .card-example {
     font-size: 12.5px;
+
     line-height: 1.8;
   }
 
@@ -1765,13 +2250,73 @@ select:focus-visible {
 
   .details-subtitle {
     align-items: flex-start;
+
     flex-direction: column;
+
     gap: 4px;
   }
 }
 
 /* =========================
-   Reduced motion
+   Very Narrow Phones
+========================= */
+
+@media (max-width: 340px) {
+  .app {
+    padding-inline: 7px;
+  }
+
+  .editor {
+    padding: 12px;
+  }
+
+  .preview {
+    padding: 8px;
+  }
+
+  .example-field textarea,
+  .field #example {
+    min-height: 88px;
+
+    font-size: 11px;
+  }
+
+  .card-export {
+    padding:
+      17px
+      14px
+      14px;
+  }
+
+  .card-word-row {
+    gap: 6px;
+  }
+
+  .card-word {
+    font-size: 28px;
+  }
+
+  .card-word-type {
+    min-width: 25px;
+
+    height: 21px;
+
+    padding-inline: 4px;
+
+    font-size: 7px;
+  }
+
+  .card-meaning-inline {
+    font-size: 14px;
+  }
+
+  .card-example {
+    font-size: 12px;
+  }
+}
+
+/* =========================
+   Reduced Motion
 ========================= */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1783,7 +2328,9 @@ select:focus-visible {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+
     animation-duration: 0.01ms !important;
+
     animation-iteration-count: 1 !important;
   }
 }

@@ -29,13 +29,41 @@ interface CardData {
 const wordTypes = [
   { value: "noun", label: "اسم (Noun)", short: "n" },
   { value: "verb", label: "فعل (Verb)", short: "v" },
-  { value: "adjective", label: "صفت (Adjective)", short: "adj" },
-  { value: "adverb", label: "قید (Adverb)", short: "adv" },
-  { value: "pronoun", label: "ضمیر (Pronoun)", short: "pron" },
-  { value: "preposition", label: "حرف اضافه (Preposition)", short: "prep" },
-  { value: "conjunction", label: "حرف ربط (Conjunction)", short: "conj" },
-  { value: "interjection", label: "حرف ندا (Interjection)", short: "interj" },
-  { value: "determiner", label: "تعیین‌کننده (Determiner)", short: "det" },
+  {
+    value: "adjective",
+    label: "صفت (Adjective)",
+    short: "adj",
+  },
+  {
+    value: "adverb",
+    label: "قید (Adverb)",
+    short: "adv",
+  },
+  {
+    value: "pronoun",
+    label: "ضمیر (Pronoun)",
+    short: "pron",
+  },
+  {
+    value: "preposition",
+    label: "حرف اضافه (Preposition)",
+    short: "prep",
+  },
+  {
+    value: "conjunction",
+    label: "حرف ربط (Conjunction)",
+    short: "conj",
+  },
+  {
+    value: "interjection",
+    label: "حرف ندا (Interjection)",
+    short: "interj",
+  },
+  {
+    value: "determiner",
+    label: "تعیین‌کننده (Determiner)",
+    short: "det",
+  },
 ];
 
 const palettes: Palette[] = [
@@ -106,10 +134,7 @@ function Icon({
     strokeLinejoin: "round" as const,
   };
 
-  const icons: Record<
-    IconName,
-    JSX.Element
-  > = {
+  const icons: Record<IconName, JSX.Element> = {
     share: (
       <>
         <path d="M4 12v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6" />
@@ -157,27 +182,17 @@ function Icon({
       </>
     ),
 
-    check: (
-      <path d="m5 12 4 4L19 6" />
-    ),
+    check: <path d="m5 12 4 4L19 6" />,
 
-    chevron: (
-      <path d="m6 9 6 6 6-6" />
-    ),
+    chevron: <path d="m6 9 6 6 6-6" />,
   };
 
-  return (
-    <svg {...common}>
-      {icons[name]}
-    </svg>
-  );
+  return <svg {...common}>{icons[name]}</svg>;
 }
 
 interface MeaningListProps {
   meanings: string[];
-  setMeanings: React.Dispatch<
-    React.SetStateAction<string[]>
-  >;
+  setMeanings: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 function MeaningList({
@@ -196,73 +211,65 @@ function MeaningList({
   };
 
   const addMeaning = () => {
-    setMeanings((current) => [
-      ...current,
-      "",
-    ]);
+    setMeanings((current) => [...current, ""]);
   };
 
-  const removeMeaning = (
-    index: number
-  ) => {
+  const removeMeaning = (index: number) => {
     setMeanings((current) => {
       if (current.length === 1) {
         return [""];
       }
 
-      return current.filter(
-        (_, i) => i !== index
-      );
+      return current.filter((_, i) => i !== index);
     });
   };
 
   return (
     <div className="meaning-list">
-      {meanings.map(
-        (meaning, index) => (
-          <div
-            className="meaning-row"
-            key={index}
-          >
-            <span className="meaning-number">
-              {index + 1}
-            </span>
+      {meanings.map((meaning, index) => (
+        <div
+          className="meaning-row"
+          key={index}
+        >
+          <span className="meaning-number">
+            {index + 1}
+          </span>
 
-            <input
-              value={meaning}
-              onChange={(event) =>
-                updateMeaning(
-                  index,
-                  event.target.value
-                )
-              }
-              placeholder={
-                index === 0
-                  ? "مثلاً: مقاوم و توانمند در بازگشت"
-                  : "یک معنی دیگر..."
-              }
-              aria-label={`معنی ${index + 1}`}
-              dir="rtl"
-            />
+          <input
+            value={meaning}
+            onChange={(event) =>
+              updateMeaning(
+                index,
+                event.target.value
+              )
+            }
+            placeholder={
+              index === 0
+                ? "مثلاً: مقاوم و توانمند در بازگشت"
+                : "یک معنی دیگر..."
+            }
+            aria-label={`معنی ${index + 1}`}
+            dir="rtl"
+            autoComplete="off"
+          />
 
-            {meanings.length > 1 && (
-              <button
-                type="button"
-                className="remove-button"
-                onClick={() =>
-                  removeMeaning(index)
-                }
-                aria-label={`حذف معنی ${index + 1}`}
-              >
-                <Icon
-                  name="trash"
-                  size={15}
-                />
-              </button>
-            )}
-          </div>
-        )
-      )}
+          {meanings.length > 1 && (
+            <button
+              type="button"
+              className="remove-button"
+              onClick={() =>
+                removeMeaning(index)
+              }
+              aria-label={`حذف معنی ${index + 1}`}
+            >
+              <Icon
+                name="trash"
+                size={15}
+              />
+            </button>
+          )}
+        </div>
+      ))}
 
       <button
         type="button"
@@ -281,11 +288,19 @@ function MeaningList({
 
 interface FamilyWordsProps {
   familyWords: string[];
-  setFamilyWords: React.Dispatch<React.SetStateAction<string[]>>;
+  setFamilyWords: React.Dispatch<
+    React.SetStateAction<string[]>
+  >;
 }
 
-function FamilyWords({ familyWords, setFamilyWords }: FamilyWordsProps) {
-  const updateFamilyWord = (index: number, value: string) => {
+function FamilyWords({
+  familyWords,
+  setFamilyWords,
+}: FamilyWordsProps) {
+  const updateFamilyWord = (
+    index: number,
+    value: string
+  ) => {
     setFamilyWords((current) => {
       const next = [...current];
       next[index] = value;
@@ -295,18 +310,25 @@ function FamilyWords({ familyWords, setFamilyWords }: FamilyWordsProps) {
 
   return (
     <div className="family-list">
-      {familyWords.map((familyWord, index) => (
-        <input
-          key={index}
-          value={familyWord}
-          onChange={(event) => updateFamilyWord(index, event.target.value)}
-          placeholder={`هم‌خانواده ${index + 1}`}
-          aria-label={`هم‌خانواده ${index + 1}`}
-          dir="ltr"
-          autoComplete="off"
-          spellCheck={false}
-        />
-      ))}
+      {familyWords.map(
+        (familyWord, index) => (
+          <input
+            key={index}
+            value={familyWord}
+            onChange={(event) =>
+              updateFamilyWord(
+                index,
+                event.target.value
+              )
+            }
+            placeholder={`هم‌خانواده ${index + 1}`}
+            aria-label={`هم‌خانواده ${index + 1}`}
+            dir="ltr"
+            autoComplete="off"
+            spellCheck={false}
+          />
+        )
+      )}
     </div>
   );
 }
@@ -325,15 +347,35 @@ function CardPreview({
       (item) => item.name === data.color
     ) || palettes[0];
 
-  const meanings = data.meanings.filter((meaning) => meaning.trim());
-  const familyWords = data.familyWords.filter((familyWord) => familyWord.trim());
-  const wordType = wordTypes.find((item) => item.value === data.wordType);
+  const meanings = data.meanings.filter(
+    (meaning) => meaning.trim()
+  );
 
-  const cardStyle = {
-    "--accent": palette.value,
-    "--glow": palette.glow,
-    "--surface": palette.surface,
-  } as React.CSSProperties;
+  const familyWords =
+    data.familyWords.filter(
+      (familyWord) => familyWord.trim()
+    );
+
+  const wordType =
+    wordTypes.find(
+      (item) =>
+        item.value === data.wordType
+    );
+
+  const cardStyle =
+    {
+      "--accent": palette.value,
+      "--glow": palette.glow,
+      "--surface": palette.surface,
+
+      /*
+       * مهم:
+       * هیچ height ثابتی برای کارت تعیین نشده.
+       * کارت بر اساس محتوا رشد می‌کند.
+       */
+      height: "auto",
+      minHeight: "320px",
+    } as React.CSSProperties;
 
   return (
     <div
@@ -343,77 +385,120 @@ function CardPreview({
     >
       <div className="card-glow" />
 
-      {/*
-        card-main به صورت صریح dir="ltr" است. این چیزی فراتر از
-        CSS معمولی است: attribute دایرکشنِ HTML یک "bidi boundary"
-        واقعی می‌سازد که کل بلاک‌بندی (نه فقط متن) را چپ‌چین می‌کند،
-        حتی وقتی کل صفحه/والدهای بالاتر راست‌چین هستند. به همین
-        دلیل بود که فقط CSS direction روی card-word-row کافی نبود:
-        آن ردیف عرضِ fit-content دارد و طبق جهتِ *والدش* به لبه‌ی
-        شروع می‌چسبید، نه جهتِ خودش.
-      */}
-      <div className="card-main" dir="ltr">
-        <div className="card-word-row" dir="ltr">
-          <div className="card-word" dir="ltr">
-            {data.word.trim() || "Your word"}
+      <div
+        className="card-main"
+        dir="ltr"
+        style={{
+          height: "auto",
+          minHeight: "0",
+        }}
+      >
+        <div
+          className="card-word-row"
+          dir="ltr"
+        >
+          <div
+            className="card-word"
+            dir="ltr"
+          >
+            {data.word.trim() ||
+              "Your word"}
           </div>
 
           {wordType && (
-            <span className="card-word-type" title={wordType.label}>
+            <span
+              className="card-word-type"
+              title={wordType.label}
+            >
               {wordType.short}
             </span>
           )}
         </div>
 
         {familyWords.length > 0 && (
-          <div className="card-family" dir="ltr">
+          <div
+            className="card-family"
+            dir="ltr"
+          >
             {familyWords.join(" / ")}
           </div>
         )}
 
         <div className="card-divider" />
 
-        
-
         {data.example.trim() && (
           <div className="card-section">
-            <span className="card-label" dir="ltr">
+            <span
+              className="card-label"
+              dir="ltr"
+            >
               EXAMPLE
             </span>
 
-            <p className="card-example" dir="ltr">
-              “{data.example}”
+            <p
+              className="card-example"
+              dir="ltr"
+              style={{
+                marginBottom: 0,
+              }}
+            >
+              “{data.example.trim()}”
             </p>
           </div>
         )}
 
         <div className="card-section">
-          <span className="card-label" dir="rtl">
+          <span
+            className="card-label"
+            dir="rtl"
+          >
             معنی فارسی
           </span>
 
           {meanings.length > 0 ? (
-            <div className="card-meaning-inline" dir="rtl">
+            <div
+              className="card-meaning-inline"
+              dir="rtl"
+            >
               {meanings.join(" / ")}
             </div>
           ) : (
-            <div className="card-empty" dir="rtl">
-              معنی کلمه اینجا نمایش داده می‌شود.
+            <div
+              className="card-empty"
+              dir="rtl"
+            >
+              معنی کلمه اینجا نمایش داده
+              می‌شود.
             </div>
           )}
         </div>
 
         {data.notes.trim() && (
-          <div className="card-note" dir="rtl">
+          <div
+            className="card-note"
+            dir="rtl"
+            style={{
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 5,
+              overflow: "hidden",
+              wordBreak: "break-word",
+              overflowWrap: "anywhere",
+            }}
+          >
             <span>↳</span>
+
             <div dir="rtl">
-              {data.notes}
+              {data.notes.trim()}
             </div>
           </div>
         )}
       </div>
 
-      <div className="card-bottom" dir="rtl">
+      <div
+        className="card-bottom"
+        dir="rtl"
+      >
         <span>
           یاد بگیر. استفاده کن.
         </span>
@@ -432,7 +517,11 @@ export default function Home() {
     useState<string[]>([""]);
 
   const [familyWords, setFamilyWords] =
-    useState<string[]>(["", "", ""]);
+    useState<string[]>([
+      "",
+      "",
+      "",
+    ]);
 
   const [wordType, setWordType] =
     useState("");
@@ -479,18 +568,44 @@ export default function Home() {
     ]
   );
 
-  const canShare =
-    Boolean(word.trim()) &&
+  /*
+   * تمام فیلدهای ضروری
+   */
+  const hasWord =
+    Boolean(word.trim());
+
+  const hasMeaning =
     meanings.some(
-      (meaning) => meaning.trim()
+      (meaning) =>
+        meaning.trim().length > 0
     );
 
+  const hasWordType =
+    Boolean(wordType.trim());
+
+  const hasExample =
+    Boolean(example.trim());
+
+  /*
+   * فعال شدن CTA فقط زمانی که
+   * همه‌ی فیلدهای ضروری کامل باشند.
+   */
+  const canShare =
+    hasWord &&
+    hasMeaning &&
+    hasWordType &&
+    hasExample;
+
+  /*
+   * جزئیات دیگر اختیاری هستند.
+   */
   const hasDetails =
     Boolean(
-      example.trim() ||
+      familyWords.some(
+        (familyWord) =>
+          familyWord.trim()
+      ) ||
         notes.trim() ||
-        familyWords.some((familyWord) => familyWord.trim()) ||
-        Boolean(wordType) ||
         color !== "violet"
     );
 
@@ -505,20 +620,30 @@ export default function Home() {
   };
 
   const validate = () => {
-    if (!word.trim()) {
+    if (!hasWord) {
       showToast(
         "اول کلمه انگلیسی را وارد کن."
       );
       return false;
     }
 
-    if (
-      !meanings.some(
-        (meaning) => meaning.trim()
-      )
-    ) {
+    if (!hasMeaning) {
       showToast(
         "حداقل یک معنی وارد کن."
+      );
+      return false;
+    }
+
+    if (!hasWordType) {
+      showToast(
+        "نوع کلمه را انتخاب کن."
+      );
+      return false;
+    }
+
+    if (!hasExample) {
+      showToast(
+        "مثال را در یک جمله وارد کن."
       );
       return false;
     }
@@ -526,24 +651,48 @@ export default function Home() {
     return true;
   };
 
-  const exportCard = async () => {
+  const createPng = async () => {
     if (!cardRef.current) {
-      return;
+      throw new Error(
+        "Card reference is missing."
+      );
     }
 
+    /*
+     * قبل از export یک frame صبر می‌کنیم
+     * تا layout نهایی DOM کامل شود.
+     */
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() =>
+        resolve()
+      )
+    );
+
+    return toPng(
+      cardRef.current,
+      {
+        pixelRatio: 2.4,
+        cacheBust: true,
+        backgroundColor: "#0b0912",
+      }
+    );
+  };
+
+  const exportCard = async () => {
     if (!validate()) {
       return;
     }
 
-    try {
-      const dataUrl = await toPng(
-        cardRef.current,
-        {
-          pixelRatio: 2.4,
-          cacheBust: true,
-          backgroundColor: "#0b0912",
-        }
+    if (!cardRef.current) {
+      showToast(
+        "کارت آماده نیست."
       );
+      return;
+    }
+
+    try {
+      const dataUrl =
+        await createPng();
 
       const link =
         document.createElement("a");
@@ -588,17 +737,21 @@ export default function Home() {
       return;
     }
 
+    if (
+      typeof navigator.share !==
+      "function"
+    ) {
+      showToast(
+        "اشتراک‌گذاری در این مرورگر پشتیبانی نمی‌شود."
+      );
+      return;
+    }
+
     setIsSharing(true);
 
     try {
-      const dataUrl = await toPng(
-        cardRef.current,
-        {
-          pixelRatio: 2.4,
-          cacheBust: true,
-          backgroundColor: "#0b0912",
-        }
-      );
+      const dataUrl =
+        await createPng();
 
       const response =
         await fetch(dataUrl);
@@ -625,16 +778,6 @@ export default function Home() {
       );
 
       if (
-        typeof navigator.share !==
-        "function"
-      ) {
-        showToast(
-          "اشتراک‌گذاری در این مرورگر پشتیبانی نمی‌شود."
-        );
-        return;
-      }
-
-      if (
         typeof navigator.canShare ===
           "function" &&
         !navigator.canShare({
@@ -649,9 +792,8 @@ export default function Home() {
 
       await navigator.share({
         title:
-          `${word} — کارت لغت`,
-        text:
-          "یک کارت لغت برای یادگیری انگلیسی ساختم.",
+          `${word.trim()} — کارت لغت`,
+        
         files: [file],
       });
     } catch (error: unknown) {
@@ -707,9 +849,19 @@ export default function Home() {
             </span>
           </div>
 
+          {/* ========================= */}
+          {/* REQUIRED FIELDS            */}
+          {/* ========================= */}
+
           <div className="field">
             <label htmlFor="word">
               کلمه انگلیسی
+              <span
+                className="required-mark"
+                aria-hidden="true"
+              >
+                *
+              </span>
             </label>
 
             <div className="input-wrap">
@@ -730,6 +882,7 @@ export default function Home() {
                 autoCapitalize="none"
                 autoComplete="off"
                 spellCheck={false}
+                aria-required="true"
               />
             </div>
           </div>
@@ -737,6 +890,12 @@ export default function Home() {
           <div className="field">
             <label>
               معنی فارسی
+              <span
+                className="required-mark"
+                aria-hidden="true"
+              >
+                *
+              </span>
             </label>
 
             <MeaningList
@@ -746,6 +905,92 @@ export default function Home() {
               }
             />
           </div>
+
+          {/* نوع کلمه از بخش جزئیات خارج شد */}
+          <div className="field">
+            <label
+              htmlFor="wordType"
+            >
+              نوع کلمه
+              <span
+                className="required-mark"
+                aria-hidden="true"
+              >
+                *
+              </span>
+            </label>
+
+            <div className="select-wrap">
+              <select
+                id="wordType"
+                value={wordType}
+                onChange={(event) =>
+                  setWordType(
+                    event.target.value
+                  )
+                }
+                required
+                aria-required="true"
+              >
+                <option value="">
+                  انتخاب نوع کلمه
+                </option>
+
+                {wordTypes.map(
+                  (item) => (
+                    <option
+                      key={item.value}
+                      value={item.value}
+                    >
+                      {item.label}
+                    </option>
+                  )
+                )}
+              </select>
+
+              <Icon
+                name="chevron"
+                size={15}
+              />
+            </div>
+          </div>
+
+          {/* مثال هم فیلد اصلی است */}
+          <div className="field">
+            <label htmlFor="example">
+              مثال در جمله
+              <span
+                className="required-mark"
+                aria-hidden="true"
+              >
+                *
+              </span>
+
+              <span className="field-hint">
+                یک جمله واقعی و کوتاه
+              </span>
+            </label>
+
+            <textarea
+              id="example"
+              value={example}
+              onChange={(event) =>
+                setExample(
+                  event.target.value
+                )
+              }
+              placeholder="مثلاً: She stayed resilient after a difficult week."
+              rows={3}
+              dir="ltr"
+              spellCheck
+              required
+              aria-required="true"
+            />
+          </div>
+
+          {/* ========================= */}
+          {/* OPTIONAL DETAILS           */}
+          {/* ========================= */}
 
           <button
             type="button"
@@ -770,7 +1015,8 @@ export default function Home() {
               </span>
 
               <span className="details-subtitle">
-                مثال، هم‌خانواده، نوع کلمه و رنگ کارت
+                هم‌خانواده، توضیحات و رنگ کارت
+
                 <span
                   className={`detail-status ${
                     hasDetails
@@ -798,66 +1044,27 @@ export default function Home() {
               <div className="detail-field">
                 <label>
                   هم‌خانواده‌ها
-                  <span>حداکثر ۳ مورد</span>
-                </label>
-
-                <FamilyWords
-                  familyWords={familyWords}
-                  setFamilyWords={setFamilyWords}
-                />
-              </div>
-
-              <div className="detail-field">
-                <label htmlFor="wordType">
-                  نوع کلمه
-                  <span>اختیاری</span>
-                </label>
-
-                <div className="select-wrap">
-                  <select
-                    id="wordType"
-                    value={wordType}
-                    onChange={(event) => setWordType(event.target.value)}
-                  >
-                    <option value="">انتخاب نوع کلمه</option>
-                    {wordTypes.map((item) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
-                  <Icon name="chevron" size={15} />
-                </div>
-              </div>
-
-              <div className="detail-field">
-                <label htmlFor="example">
-                  مثال در جمله
                   <span>
-                    اختیاری
+                    حداکثر ۳ مورد
                   </span>
                 </label>
 
-                <textarea
-                  id="example"
-                  value={example}
-                  onChange={(event) =>
-                    setExample(
-                      event.target.value
-                    )
+                <FamilyWords
+                  familyWords={
+                    familyWords
                   }
-                  placeholder="مثلاً: She stayed resilient after a difficult week."
-                  rows={3}
-                  dir="ltr"
-                  spellCheck
+                  setFamilyWords={
+                    setFamilyWords
+                  }
                 />
               </div>
 
+              {/* توضیحات با محدودیت 5 خط */}
               <div className="detail-field">
                 <label htmlFor="notes">
                   توضیحات بیشتر
                   <span>
-                    اختیاری
+                    حداکثر ۵ خط
                   </span>
                 </label>
 
@@ -870,9 +1077,18 @@ export default function Home() {
                     )
                   }
                   placeholder="مثلاً تلفظ، مترادف یا یک نکته برای به خاطر سپردن..."
-                  rows={3}
+                  rows={5}
+                  maxLength={500}
                   dir="rtl"
+                  style={{
+                    minHeight:
+                      "140px",
+                  }}
                 />
+
+                <div className="character-counter">
+                  {notes.length}/500
+                </div>
               </div>
 
               <div className="color-field">
@@ -935,9 +1151,11 @@ export default function Home() {
               </div>
             </div>
           )}
-
-          
         </div>
+
+        {/* ========================= */}
+        {/* PREVIEW                    */}
+        {/* ========================= */}
 
         <div className="preview">
           <div className="preview-header">
@@ -951,7 +1169,14 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="preview-stage">
+          <div
+            className="preview-stage"
+            style={{
+              alignItems: "flex-start",
+              paddingTop: "24px",
+              paddingBottom: "24px",
+            }}
+          >
             <CardPreview
               data={data}
               cardRef={cardRef}
@@ -959,43 +1184,55 @@ export default function Home() {
           </div>
         </div>
 
+        {/* ========================= */}
+        {/* ACTIONS                    */}
+        {/* ========================= */}
+
         <button
-            type="button"
-            className="share-button"
-            disabled={
-              !canShare ||
-              isSharing
-            }
-            onClick={
-              shareCard
-            }
-          >
-            <Icon
-              name="share"
-              size={18}
-            />
+          type="button"
+          className="share-button"
+          disabled={
+            !canShare ||
+            isSharing
+          }
+          onClick={
+            shareCard
+          }
+        >
+          <Icon
+            name="share"
+            size={18}
+          />
 
-            <span>
-              {isSharing
-                ? "در حال آماده‌سازی..."
-                : "اشتراک‌گذاری کارت"}
-            </span>
-          </button>
+          <span>
+            {isSharing
+              ? "در حال آماده‌سازی..."
+              : "اشتراک‌گذاری کارت"}
+          </span>
+        </button>
 
-          <button
-            type="button"
-            className="download-button"
-            disabled={!canShare}
-            onClick={
-              exportCard
-            }
-          >
-            <Icon
-              name="download"
-              size={16}
-            />
-            دانلود PNG
-          </button>
+        <button
+          type="button"
+          className="download-button"
+          disabled={!canShare}
+          onClick={
+            exportCard
+          }
+        >
+          <Icon
+            name="download"
+            size={16}
+          />
+
+          دانلود PNG
+        </button>
+
+        {!canShare && (
+          <p className="required-hint">
+            برای ساخت کارت، کلمه، معنی، نوع
+            کلمه و مثال را کامل کن.
+          </p>
+        )}
       </section>
 
       {toast && (
